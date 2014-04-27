@@ -1,18 +1,19 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+$loader = require_once __DIR__.'/../vendor/autoload.php';
 require_once 'data.php';
 
-$app = new Silex\Application();
 
-$app['debug'] = true;
+use Domora\TvGuide\Data\Program;
+use Domora\TvGuide\Data\Channel;
 
-$app->get('/schedule', function () use ($app, $guide) {
-    return $app->json($guide);
-});
+Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
-$app->get('/programs/{id}', function($id) use ($app,$programs) {
-    return $app->json($programs[$id]);
-});
+$app = new Domora\TvGuide\Application();
 
+
+//~ $fixtures = new Domora\DataFixtures($app['orm.em']);
+//~ $fixtures->load();
+
+$app->mount('/v1', new Domora\TvGuide\Controller\ControllerProvider());
 $app->run();
