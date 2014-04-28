@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * @ORM\Entity
  * @ORM\Table(name="program")
+ * @Serializer\XmlRoot("programme")
  */
 class Program
 {
@@ -15,7 +16,7 @@ class Program
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "details"})
      */
     protected $id;
 
@@ -27,25 +28,30 @@ class Program
 
     /**
      * @ORM\Column(type="string")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\SerializedName("title")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\SerializedName("desc")
      */
     protected $description;
 
     /**
      * @ORM\Column(type="datetimetz")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\XmlAttribute()
      */
     protected $start;
 
     /**
      * @ORM\Column(type="datetimetz")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\SerializedName("stop")
+     * @Serializer\XmlAttribute()
      */
     protected $end;
 
@@ -164,7 +170,8 @@ class Program
     /**
      * @Serializer\VirtualProperty
      * @Serializer\SerializedName("channel")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"xmltv", "details"})
+     * @Serializer\XmlAttribute()
      */
     public function getSerializedChannel()
     {

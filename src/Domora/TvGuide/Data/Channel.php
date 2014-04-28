@@ -10,6 +10,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * @ORM\Entity
  * @ORM\Table(name="channel")
+ * @Serializer\XmlRoot("channel")
  */
 class Channel
 {
@@ -18,20 +19,23 @@ class Channel
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      * @Serializer\ReadOnly()
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\XmlAttribute()
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
-     * @Serializer\Groups({"list", "details"})
+     * @Serializer\SerializedName("display-name")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Program", mappedBy="channel")
      * @Serializer\Accessor(getter="getPrograms")
-     * @Serializer\Groups({"list"})
+     * @Serializer\Groups({"schedule"})
+     * @Serializer\XmlList(entry="program")
      */
     private $programs;
 

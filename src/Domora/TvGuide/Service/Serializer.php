@@ -16,9 +16,15 @@ class Serializer
         'xml' => 'application/xml'
     ];
     
-    public function __construct($serializer)
+    public function __construct($serializer, $format = self::FORMAT_JSON)
     {
         $this->serializer = $serializer;
+        $this->format = self::FORMAT_JSON;
+    }
+    
+    public function setFormat($format)
+    {
+        $this->format = $format;
     }
 
     public function response($data, array $groups = null)
@@ -30,15 +36,13 @@ class Serializer
             $context->setGroups($groups);
         }
 
-        $format = self::FORMAT_JSON;
-
-        $body = $this->serializer->serialize($data, $format, $context);
+        $body = $this->serializer->serialize($data, $this->format, $context);
 
         if (!$body) {
-            return $this->buildResponse("Unable to serialize object", 500, $format);
+            return $this->buildResponse("Unable to serialize object", 500);
         }
 
-        return $this->buildResponse($body, 200, $format);
+        return $this->buildResponse($body, 200);
     }
 
     public function error($message, $code)
@@ -48,15 +52,14 @@ class Serializer
             "error" => $code
         ];
 
-        $format = self::FORMAT_JSON;
-        $body = $this->serializer->serialize($data, $format);
+        $body = $this->serializer->serialize($data, $this->format);
         
-        return $this->buildResponse($body, $code, $format);
+        return $this->buildResponse($body, $code);
     }
 
-    private function buildResponse($body, $status, $format)
+    private function buildResponse($body, $status)
     {
-        $headers = ["Content-Type" => $this->contentTypes[$format]];
+        $headers = ["Content-Type" => $this->contentTypes[$this->format]];
 
         return new Response($body, $status, $headers);
     }
