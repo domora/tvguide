@@ -19,7 +19,7 @@ class Serializer
     public function __construct($serializer, $format = self::FORMAT_JSON)
     {
         $this->serializer = $serializer;
-        $this->format = self::FORMAT_JSON;
+        $this->format = self::FORMAT_XML;
     }
     
     public function setFormat($format)

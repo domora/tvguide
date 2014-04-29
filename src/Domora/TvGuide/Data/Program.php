@@ -16,6 +16,7 @@ class Program
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
+     * @Serializer\Type("integer")
      * @Serializer\Groups({"schedule", "details"})
      */
     protected $id;
@@ -28,20 +29,57 @@ class Program
 
     /**
      * @ORM\Column(type="string")
+     * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
-     * @Serializer\SerializedName("title")
      */
-    protected $name;
+    protected $title;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     */
+    protected $subtitle;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     */
+    protected $episode;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     */
+    protected $category;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     */
+    protected $image;
 
     /**
      * @ORM\Column(type="text")
+     * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\SerializedName("desc")
      */
     protected $description;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Credit", mappedBy="program")
+     * @Serializer\Type("array<Credit>")
+     * @Serializer\Groups({"xmltv", "details"})
+     */
+    protected $credits;
 
     /**
      * @ORM\Column(type="datetimetz")
+     * @Serializer\Type("DateTime<'YmdHis O'>")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\XmlAttribute()
      */
@@ -49,30 +87,29 @@ class Program
 
     /**
      * @ORM\Column(type="datetimetz")
+     * @Serializer\Type("DateTime<'YmdHis O'>")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
-     * @Serializer\SerializedName("stop")
      * @Serializer\XmlAttribute()
      */
-    protected $end;
-
-    public function getId()
+    protected $stop;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        return $this->id;
+        $this->credits = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-    public function setId($id)
+    
+    /**
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("channel")
+     * @Serializer\Groups({"xmltv", "details"})
+     * @Serializer\XmlAttribute()
+     */
+    public function getSerializedChannel()
     {
-        $this->id = $id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
+        return $this->channel->getId();
     }
 
     /**
@@ -122,29 +159,6 @@ class Program
     }
 
     /**
-     * Set end
-     *
-     * @param \DateTime $end
-     * @return Program
-     */
-    public function setEnd($end)
-    {
-        $this->end = $end;
-
-        return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return \DateTime 
-     */
-    public function getEnd()
-    {
-        return $this->end;
-    }
-
-    /**
      * Set channel
      *
      * @param \Domora\TvGuide\Data\Channel $channel
@@ -168,13 +182,183 @@ class Program
     }
 
     /**
-     * @Serializer\VirtualProperty
-     * @Serializer\SerializedName("channel")
-     * @Serializer\Groups({"xmltv", "details"})
-     * @Serializer\XmlAttribute()
+     * Set category
+     *
+     * @param string $category
+     * @return Program
      */
-    public function getSerializedChannel()
+    public function setCategory($category)
     {
-        return $this->channel->getId();
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return string 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return Program
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set stop
+     *
+     * @param \DateTime $stop
+     * @return Program
+     */
+    public function setStop($stop)
+    {
+        $this->stop = $stop;
+
+        return $this;
+    }
+
+    /**
+     * Get stop
+     *
+     * @return \DateTime 
+     */
+    public function getStop()
+    {
+        return $this->stop;
+    }
+
+    /**
+     * Set subtitle
+     *
+     * @param string $subtitle
+     * @return Program
+     */
+    public function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+
+        return $this;
+    }
+
+    /**
+     * Get subtitle
+     *
+     * @return string 
+     */
+    public function getSubtitle()
+    {
+        return $this->subtitle;
+    }
+
+    /**
+     * Set episode
+     *
+     * @param string $episode
+     * @return Program
+     */
+    public function setEpisode($episode)
+    {
+        $this->episode = $episode;
+
+        return $this;
+    }
+
+    /**
+     * Get episode
+     *
+     * @return string 
+     */
+    public function getEpisode()
+    {
+        return $this->episode;
+    }
+
+    /**
+     * Add credits
+     *
+     * @param \Domora\TvGuide\Data\Credit $credits
+     * @return Program
+     */
+    public function addCredit(\Domora\TvGuide\Data\Credit $credits)
+    {
+        $this->credits[] = $credits;
+
+        return $this;
+    }
+
+    /**
+     * Remove credits
+     *
+     * @param \Domora\TvGuide\Data\Credit $credits
+     */
+    public function removeCredit(\Domora\TvGuide\Data\Credit $credits)
+    {
+        $this->credits->removeElement($credits);
+    }
+    
+    /**
+     * Get credits
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCredits()
+    {
+        return $this->credits;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Program
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }
