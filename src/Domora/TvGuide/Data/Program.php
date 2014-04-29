@@ -4,6 +4,7 @@ namespace Domora\TvGuide\Data;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Domora\TvGuide\Data\Credits;
 
 /**
  * @ORM\Entity
@@ -71,9 +72,10 @@ class Program
     protected $description;
     
     /**
-     * @ORM\OneToMany(targetEntity="Credit", mappedBy="program")
-     * @Serializer\Type("array<Credit>")
+     * @ORM\Embedded(class="Credits")
+     * @Serializer\Type("Domora\TvGuide\Data\Credits")
      * @Serializer\Groups({"xmltv", "details"})
+     * @Serializer\Inline()
      */
     protected $credits;
 
@@ -93,24 +95,16 @@ class Program
      */
     protected $stop;
     
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->credits = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * @Serializer\VirtualProperty
-     * @Serializer\SerializedName("channel")
-     * @Serializer\Groups({"xmltv", "details"})
-     * @Serializer\XmlAttribute()
-     */
-    public function getSerializedChannel()
-    {
-        return $this->channel->getId();
-    }
+    //~ /**
+     //~ * @Serializer\VirtualProperty
+     //~ * @Serializer\SerializedName("channel")
+     //~ * @Serializer\Groups({"xmltv", "details"})
+     //~ * @Serializer\XmlAttribute()
+     //~ */
+    //~ public function getSerializedChannel()
+    //~ {
+        //~ return $this->channel->getId();
+    //~ }
 
     /**
      * Set description
@@ -297,39 +291,6 @@ class Program
     }
 
     /**
-     * Add credits
-     *
-     * @param \Domora\TvGuide\Data\Credit $credits
-     * @return Program
-     */
-    public function addCredit(\Domora\TvGuide\Data\Credit $credits)
-    {
-        $this->credits[] = $credits;
-
-        return $this;
-    }
-
-    /**
-     * Remove credits
-     *
-     * @param \Domora\TvGuide\Data\Credit $credits
-     */
-    public function removeCredit(\Domora\TvGuide\Data\Credit $credits)
-    {
-        $this->credits->removeElement($credits);
-    }
-    
-    /**
-     * Get credits
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCredits()
-    {
-        return $this->credits;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -360,5 +321,28 @@ class Program
     public function getTitle()
     {
         return $this->title;
+    }
+    
+    /**
+     * Set credits
+     *
+     * @param Credits $credits
+     * @return Credits
+     */
+    public function setCredits($credits)
+    {
+        $this->credits = $credits;
+
+        return $this;
+    }
+
+    /**
+     * Get credits
+     *
+     * @return Credits 
+     */
+    public function getCredits()
+    {
+        return $this->credits;
     }
 }

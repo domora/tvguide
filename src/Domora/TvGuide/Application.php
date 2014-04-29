@@ -4,9 +4,9 @@ namespace Domora\TvGuide;
 
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
-use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Macedigital\Silex\Provider\SerializerProvider;
 
+use Domora\Silex\Provider\DoctrineORMServiceProvider;
 use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
 
@@ -36,7 +36,7 @@ class Application extends SilexApplication
             ],
         ]);
 
-        $this->register(new DoctrineOrmServiceProvider(), array(
+        $this->register(new DoctrineORMServiceProvider(), [
             "orm.proxies_dir" => $this['cache.directory'],
             "orm.em.options" => array(
                 "mappings" => array(
@@ -48,7 +48,7 @@ class Application extends SilexApplication
                     ),
                 ),
             ),
-        ));
+        ]);
 
         $this['serializer.cache_dir'] = $this['cache.directory'];
         $this->register(new SerializerProvider());
