@@ -4,11 +4,13 @@ namespace Domora\TvGuide;
 
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
-use Macedigital\Silex\Provider\SerializerProvider;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\Handler\HandlerRegistry;
 
 use Domora\Silex\Provider\DoctrineORMServiceProvider;
 use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
+use Domora\TvGuide\Service\DateTimeSerializer;
 
 class Application extends SilexApplication
 {
@@ -50,8 +52,16 @@ class Application extends SilexApplication
             ),
         ]);
 
-        $this['serializer.cache_dir'] = $this['cache.directory'];
-        $this->register(new SerializerProvider());
+        $this['serializer'] = $this->share(function() {
+            $builder = SerializerBuilder::create();
+            $builder->setDebug($this['debug']);
+            $builder->setCacheDir($this['cache.directory']);
+            $builder->configureHandlers(function(HandlerRegistry $registry) {
+                $registry->registerSubscribingHandler(new DateTimeSerializer());
+            });
+
+            return $builder->build();
+        });
     }
 
     private function registerInternalServices()

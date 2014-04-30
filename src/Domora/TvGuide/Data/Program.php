@@ -36,35 +36,35 @@ class Program
     protected $title;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     protected $subtitle;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     protected $episode;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     protected $category;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     protected $image;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\SerializedName("desc")
@@ -75,13 +75,12 @@ class Program
      * @ORM\Embedded(class="Credits")
      * @Serializer\Type("Domora\TvGuide\Data\Credits")
      * @Serializer\Groups({"xmltv", "details"})
-     * @Serializer\Inline()
      */
     protected $credits;
 
     /**
      * @ORM\Column(type="datetimetz")
-     * @Serializer\Type("DateTime<'YmdHis O'>")
+     * @Serializer\Type("DateTime")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\XmlAttribute()
      */
@@ -89,22 +88,22 @@ class Program
 
     /**
      * @ORM\Column(type="datetimetz")
-     * @Serializer\Type("DateTime<'YmdHis O'>")
+     * @Serializer\Type("DateTime")
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\XmlAttribute()
      */
     protected $stop;
     
-    //~ /**
-     //~ * @Serializer\VirtualProperty
-     //~ * @Serializer\SerializedName("channel")
-     //~ * @Serializer\Groups({"xmltv", "details"})
-     //~ * @Serializer\XmlAttribute()
-     //~ */
-    //~ public function getSerializedChannel()
-    //~ {
-        //~ return $this->channel->getId();
-    //~ }
+    /**
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("channel")
+     * @Serializer\Groups({"xmltv", "details"})
+     * @Serializer\XmlAttribute()
+     */
+    public function getSerializedChannel()
+    {
+        return $this->channel->getId();
+    }
 
     /**
      * Set description

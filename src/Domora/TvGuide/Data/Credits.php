@@ -10,38 +10,84 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class Credits
 {
-    const DIRECTOR = 'director';
-    const ACTOR = 'actor';
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="director")
+     * @Serializer\Groups({"xmltv", "details"})
+     */
+    protected $directors;
     
     /**
-     * @ORM\Column(type="array")
-     * @Serializer\Exclude()
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="actor")
+     * @Serializer\Groups({"xmltv", "details"})
      */
-    protected $data;
+    protected $actors;
     
     /**
-     * @Serializer\HandlerCallback("xml", direction="serialization")
-     * @Serializer\Groups({"xmltv"})
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="presenter")
+     * @Serializer\Groups({"xmltv", "details"})
      */
-    public function serializeToXml(\JMS\Serializer\XmlSerializationVisitor $visitor)
+    protected $presenters;
+    
+    //~ /**
+     //~ * @Serializer\HandlerCallback("xml", direction="serialization")
+     //~ * @Serializer\Groups({"xmltv"})
+     //~ */
+    //~ public function serializeToXml(\JMS\Serializer\XmlSerializationVisitor $visitor)
+    //~ {
+        //~ if (empty($this->data)) return null;
+        //~ 
+        //~ $document = isset($visitor->document) ? $visitor->document : $visitor->createDocument(null, null, true);
+        //~ $root = $document->createElement('credits');
+        //~ 
+        //~ foreach ($this->data as $category => $entries) {
+            //~ foreach ($entries as $entry) {
+                //~ $node = $document->createElement($category);
+                //~ $node->appendChild($document->createTextNode($entry['name']));
+                //~ 
+                //~ if ($category == self::ACTOR && isset($entry['role'])) {
+                    //~ $role = $document->createAttribute("role");
+                    //~ $role->appendChild($document->createTextNode($entry['role']));
+                    //~ $node->appendChild($role);
+                //~ }
+                //~ 
+                //~ $root->appendChild($node);
+            //~ }
+        //~ }
+//~ 
+        //~ return $root;
+    //~ }
+    
+    //~ /**
+     //~ * @Serializer\HandlerCallback("xml", direction="deserialization")
+     //~ * @Serializer\Groups({"xmltv"})
+     //~ */
+    //~ public function deserializeFromXml(\JMS\Serializer\XmlDeserializationVisitor $visitor, $data)
+    //~ {
+        //~ var_dump($data);
+        //~ 
+        //~ foreach ($data->actor as $key => $value) {
+            //~ print $value."<br>";
+        //~ }
+    //~ }
+    
+    public function addDirector($director)
     {
-        $document = isset($visitor->document) ? $visitor->document : $visitor->createDocument(null, null, true);
-        $root = $document->createElement('credits');
-        
-        foreach ($this->data as $entry) {
-            list($role, $name) = $entry;
-            $node = $document->createElement($role);
-            $node->appendChild($document->createTextNode($name));
-            $root->appendChild($node);
-        }
-
-        return $root;
+        $this->directors[] = $director;
     }
     
-    public function add($role, $name)
+    public function addActor($name, $role = null)
     {
-        $this->data[] = [$role, $name];
+        $this->actors[] = $name;
     }
     
-    
+    public function addPresenter($presenter)
+    {
+        $this->presenters[] = $presenter;
+    }
 }

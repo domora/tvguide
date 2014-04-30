@@ -16,10 +16,10 @@ class Serializer
         'xml' => 'application/xml'
     ];
     
-    public function __construct($serializer, $format = self::FORMAT_JSON)
+    public function __construct($serializer)
     {
         $this->serializer = $serializer;
-        $this->format = self::FORMAT_XML;
+        $this->format = self::FORMAT_JSON;
     }
     
     public function setFormat($format)

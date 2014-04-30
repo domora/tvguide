@@ -33,6 +33,7 @@ class Channel
 
     /**
      * @ORM\OneToMany(targetEntity="Program", mappedBy="channel")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Program>")
      * @Serializer\Accessor(getter="getPrograms")
      * @Serializer\Groups({"schedule"})
      * @Serializer\XmlList(entry="program")

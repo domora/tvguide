@@ -70,11 +70,11 @@ class DataFixtures
             
             $program = new Program();
             $program->setChannel($channel);
-            $program->setName(ucfirst(implode(' ', array_slice($words, 0, rand(1, 5)))));
+            $program->setTitle(ucfirst(implode(' ', array_slice($words, 0, rand(1, 5)))));
             $program->setDescription($description);
             $program->setStart(clone $date);
             $date->modify(sprintf('+%d minutes', rand(5, 120)));
-            $program->setEnd(clone $date);
+            $program->setStop(clone $date);
             $date->modify('+3 minutes');
 
             $channel->addProgram($program);
