@@ -3,8 +3,9 @@
         "silex/silex": "~1.1",
         "doctrine/dbal": "2.5.*@dev",
         "doctrine/orm": "dev-master",
-        "macedigital/silex-jms-serializer": "1.0.0.*@dev",
-        "fabpot/goutte": "1.0.*@dev"
+        "symfony/console": "2.3.*",
+        "fabpot/goutte": "1.0.*@dev",
+        "jms/serializer": "0.15.*@dev"
     },
     "autoload": {
         "psr-0": {

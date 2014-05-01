@@ -20,7 +20,7 @@ class Schedule
     }
     
     /**
-     * @Serializer\Type("array<Channel>")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Channel>")
      * @Serializer\VirtualProperty()
      * @Serializer\SerializedName("channels")
      * @Serializer\XmlList(inline=true, entry="channel")
@@ -32,7 +32,7 @@ class Schedule
     }
     
     /**
-     * @Serializer\Type("array<Program>")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Program>")
      * @Serializer\VirtualProperty()
      * @Serializer\SerializedName("programs")
      * @Serializer\XmlList(inline=true, entry="programme")
@@ -50,7 +50,7 @@ class Schedule
     }
     
     /**
-     * @Serializer\Type("array<Channel>")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Channel>")
      * @Serializer\VirtualProperty()
      * @Serializer\XmlList(entry="channel")
      * @Serializer\Groups({"schedule"})

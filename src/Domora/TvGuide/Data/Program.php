@@ -9,15 +9,15 @@ use Domora\TvGuide\Data\Credits;
 /**
  * @ORM\Entity
  * @ORM\Table(name="program")
+ * @ORM\HasLifecycleCallbacks
  * @Serializer\XmlRoot("programme")
  */
 class Program
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     * @Serializer\Type("integer")
+     * @ORM\Column(type="string", length=10)
+     * @Serializer\Type("string")
      * @Serializer\Groups({"schedule", "details"})
      */
     protected $id;
@@ -298,6 +298,23 @@ class Program
     {
         return $this->id;
     }
+    
+    /**
+     * Generate a unique ID for this program
+     * 
+     * @ORM\PrePersist
+     */
+    public function generateUniqueId()
+    {
+        // Hashes title and subtitle
+        $data = $this->sluggify($this->title);
+        if ($this->subtitle) $data .= $this->sluggify($this->subtitle);
+        
+        // Hashes date (without hour info)
+        $data .= $this->start->format('YmdHi');
+        
+        $this->id = substr(sha1($data), 0, 10);
+    }
 
     /**
      * Set title
@@ -343,5 +360,21 @@ class Program
     public function getCredits()
     {
         return $this->credits;
+    }
+    
+    private function sluggify($text)
+    {
+        // Replaces non letter or digits by -
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+        $text = trim($text, '-');
+        
+        // Transliterates
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        
+        // Lowercase
+        $text = strtolower($text);
+        
+        // Removes unwanted characters
+        return preg_replace('~[^-\w]+~', '', $text);
     }
 }

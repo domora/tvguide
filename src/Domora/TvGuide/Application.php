@@ -6,11 +6,14 @@ use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
+use Goutte\Client;
 
 use Domora\Silex\Provider\DoctrineORMServiceProvider;
 use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\DateTimeSerializer;
+
+use Domora\TvGuide\Provider\FranceTelevision;
 
 class Application extends SilexApplication
 {
@@ -21,6 +24,7 @@ class Application extends SilexApplication
         $this['debug'] = true;
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
+        $this['image.directory'] = __DIR__.'/../../../web/images';
 
         $this->registerServiceProviders();
         $this->registerInternalServices();
@@ -35,6 +39,8 @@ class Application extends SilexApplication
                 'dbname' => 'tvguide',
                 'user' => 'root',
                 'password' => '',
+                'charset' => 'utf8',
+                
             ],
         ]);
 
@@ -69,6 +75,18 @@ class Application extends SilexApplication
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {
             return new Serializer($this['serializer']);
+        });
+        
+        // Custom goutte client
+        $this['scraper.client'] = function() {
+            $client = new Client();
+            $client->setHeader('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/29.0');
+            
+            return $client;
+        };
+        
+        $this['provider.francetv'] = $this->share(function() {
+            return new FranceTelevision($this['scraper.client'], $this['orm.em']);
         });
     }
 }

@@ -18,12 +18,40 @@ class DataFixtures
     {
         //$this->em->clearDatabase();
         
-        $channelNames = ['TF1', 'France 2', 'France 3', 'Canal+', 'France 5', 'M6'];
+        $channelNames = [
+            'fr-tf1' => 'TF1',
+            'fr-france2' => 'France 2',
+            'fr-france3' => 'France 3',
+            'fr-france4' => 'France 4',
+            'fr-france5' => 'France 5',
+            'fr-franceo' => 'France ô',
+            'fr-canal' => 'Canal+',
+            'fr-m6' => 'M6',
+            'fr-arte' => 'Arte',
+            'fr-d8' => 'D8',
+            'fr-w9' => 'W9',
+            'fr-tmc' => 'TMC',
+            'fr-nt1' => 'NT1',
+            'fr-nrj12' => 'NRJ12',
+            'fr-lcp-senat' => 'LCP - Public Sénat',
+            'fr-bfmtv' => 'BFMTV',
+            'fr-itv' => 'I>Télé',
+            'fr-d17' => 'D17',
+            'fr-gulli' => 'Gulli',
+            'fr-hd1' => 'HD1',
+            'fr-equipe21' => 'L\'équipe 21',
+            'fr-6ter' => '6ter',
+            'fr-23' => '23',
+            'fr-rmc' => 'RMC Découverte',
+            'fr-cherie25' => 'Chérie 25',
+        ];
+        
         $channels = [];
         $programs = [];
 
-        foreach ($channelNames as $i => $name) {
+        foreach ($channelNames as $id => $name) {
             $channel = new Channel();
+            $channel->setId($id);
             $channel->setName($name);
             $this->em->persist($channel);
             $this->generatePrograms($channel, 50);
@@ -76,7 +104,7 @@ class DataFixtures
             $date->modify(sprintf('+%d minutes', rand(5, 120)));
             $program->setStop(clone $date);
             $date->modify('+3 minutes');
-
+            
             $channel->addProgram($program);
             $this->em->persist($program);
         }

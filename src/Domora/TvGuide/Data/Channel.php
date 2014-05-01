@@ -16,8 +16,7 @@ class Channel
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
+     * @ORM\Column(type="string")
      * @Serializer\ReadOnly()
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      * @Serializer\XmlAttribute()
@@ -58,6 +57,19 @@ class Channel
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set id
+     * 
+     * @param string id
+     * @return Channel
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

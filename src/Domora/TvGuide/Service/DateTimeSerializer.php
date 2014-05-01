@@ -48,8 +48,8 @@ class DateTimeSerializer implements SubscribingHandlerInterface
             return $date->format($type['params'][0]);
         }
         
-        // Returns date in the ISO8601 format
-        return $date->format(\DateTime::ISO8601);
+        // Returns date in the UNIX format
+        return (int) $date->getTimestamp();
     }
     
     public function deserializeXmlDateTime($visitor, \SimpleXMLElement $xml, array $params, Context $context)
