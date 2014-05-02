@@ -4,56 +4,43 @@ namespace Domora\TvGuide\Data;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="channel")
- * @Serializer\XmlRoot("channel")
+ * @ORM\Table(name="service")
  */
-class Channel
+class Service
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
-     * @Serializer\ReadOnly()
-     * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
-     * @Serializer\XmlAttribute()
+     * @Serializer\Groups({"list", "service"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
-     * @Serializer\SerializedName("display-name")
-     * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
+     * @Serializer\Groups({"list", "service"})
      */
     private $name;
     
     /**
      * @ORM\Column(type="string")
-     * @Serializer\SerializedName("country")
-     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\Groups({"list", "service"})
      */
     private $country;
 
     /**
-     * @ORM\OneToMany(targetEntity="Program", mappedBy="channel")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Program>")
-     * @Serializer\Accessor(getter="getPrograms")
-     * @Serializer\Groups({"schedule"})
-     * @Serializer\XmlList(entry="program")
+     * @ORM\OneToMany(targetEntity="ServiceChannelAssociation", mappedBy="service")
+     * @Serializer\Type("array<Domora\TvGuide\Data\ServiceChannelAssociation>")
+     * @Serializer\Groups({"service"})
      */
-    private $programs;
-
-    /**
-     * @Serializer\Exclude()
-     */
-    private static $programsFilter;
+    private $channels;
 
     public function __construct()
     {
-        $this->programs = new ArrayCollection();
+        $this->channels = new ArrayCollection();
     }
 
     /**
@@ -126,42 +113,36 @@ class Channel
     }
 
     /**
-     * Add programs
+     * Add channels
      *
-     * @param \Domora\TvGuide\Data\Program $programs
-     * @return Channel
+     * @param \Domora\TvGuide\Data\ServiceChannelAssociation $channels
+     *
+     * @return Service
      */
-    public function addProgram(Program $programs)
+    public function addChannel(\Domora\TvGuide\Data\ServiceChannelAssociation $channels)
     {
-        $this->programs[] = $programs;
+        $this->channels[] = $channels;
 
         return $this;
     }
 
     /**
-     * Remove programs
+     * Remove channels
      *
-     * @param \Domora\TvGuide\Data\Program $programs
+     * @param \Domora\TvGuide\Data\ServiceChannelAssociation $channels
      */
-    public function removeProgram(Program $programs)
+    public function removeChannel(\Domora\TvGuide\Data\ServiceChannelAssociation $channels)
     {
-        $this->programs->removeElement($programs);
+        $this->channels->removeElement($channels);
     }
 
     /**
-     * Get programs
+     * Get channels
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPrograms(Criteria $criteria = null)
+    public function getChannels()
     {
-        if (!$criteria) $criteria = self::$programsFilter;
-        
-        return $criteria ? $this->programs->matching(clone $criteria) : $this->programs;
-    }
-
-    public static function setProgramsFilter(Criteria $criteria)
-    {
-        self::$programsFilter = $criteria;
+        return $this->channels;
     }
 }
