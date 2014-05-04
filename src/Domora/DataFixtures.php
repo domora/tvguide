@@ -35,7 +35,7 @@ class DataFixtures
             'fr-nrj12' => 'NRJ12',
             'fr-lcp-senat' => 'LCP - Public Sénat',
             'fr-bfmtv' => 'BFMTV',
-            'fr-itv' => 'I>Télé',
+            'fr-itele' => 'I>Télé',
             'fr-d17' => 'D17',
             'fr-gulli' => 'Gulli',
             'fr-hd1' => 'HD1',

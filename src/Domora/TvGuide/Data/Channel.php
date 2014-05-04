@@ -78,6 +78,16 @@ class Channel
         
         return $this;
     }
+    
+    /**
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("image")
+     * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
+     */
+    public function getImage()
+    {
+        return sprintf('%s/%s.png', 'images/channels', $this->id);
+    }
 
     /**
      * Set name
