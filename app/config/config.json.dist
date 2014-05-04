@@ -6,6 +6,9 @@
             "name": "tvguide",
             "user": "root",
             "password": ""
+        },
+        "tvscraper": {
+            "proxy": "tcp://5.135.78.84:8888"
         }
     }
 }

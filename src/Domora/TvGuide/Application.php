@@ -84,6 +84,11 @@ class Application extends SilexApplication
         // Custom goutte client
         $this['scraper.client'] = function() {
             $client = new Client();
+            
+            if (isset($this['parameters']['tvscraper']['proxy'])) {
+                $client->getClient()->getConfig()->setPath('request.options/proxy', $this['parameters']['tvscraper']['proxy']);
+            }
+            
             $client->setHeader('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/29.0');
             
             return $client;
