@@ -1,3 +1,4 @@
+app/config/config.json
 vendor
 app/cache
 web/images/*

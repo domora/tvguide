@@ -6,6 +6,7 @@ use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
+use Igorw\Silex\ConfigServiceProvider;
 use Goutte\Client;
 
 use Domora\Silex\Provider\DoctrineORMServiceProvider;
@@ -21,7 +22,6 @@ class Application extends SilexApplication
     {
         parent::__construct();
         
-        $this['debug'] = true;
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
         $this['image.directory'] = __DIR__.'/../../../web/images';
@@ -32,15 +32,19 @@ class Application extends SilexApplication
 
     private function registerServiceProviders()
     {
+        $env = getenv('APP_ENV') ?: 'prod';
+        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/$env.json"));
+
+        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/config.json"));
+
         $this->register(new DoctrineServiceProvider(), [
             'db.options' => [
-                'driver' => 'pdo_mysql',
-                'host' => 'localhost',
-                'dbname' => 'tvguide',
-                'user' => 'root',
-                'password' => '',
-                'charset' => 'utf8',
-                
+                'driver' => $this['parameters']['db']['driver'],
+                'host' => $this['parameters']['db']['host'],
+                'dbname' => $this['parameters']['db']['name'],
+                'user' => $this['parameters']['db']['user'],
+                'password' => $this['parameters']['db']['password'],
+                'charset' => 'utf8'
             ],
         ]);
 

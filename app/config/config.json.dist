@@ -1,0 +1,11 @@
+{
+    "parameters": {
+        "db" : {
+            "driver": "pdo_mysql",
+            "host": "localhost",
+            "name": "tvguide",
+            "user": "root",
+            "password": ""
+        }
+    }
+}
