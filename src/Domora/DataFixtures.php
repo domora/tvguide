@@ -53,6 +53,7 @@ class DataFixtures
             $channel = new Channel();
             $channel->setId($id);
             $channel->setName($name);
+            $channel->setCountry('fr');
             $this->em->persist($channel);
             $this->generatePrograms($channel, 50);
         }
