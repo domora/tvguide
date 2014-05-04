@@ -1,4 +1,5 @@
 app/config/config.json
 vendor
 app/cache
-web/images/*
+web/images/channels/*
+web/images/programs/*

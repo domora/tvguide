@@ -24,7 +24,7 @@ class Application extends SilexApplication
         
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
-        $this['image.directory'] = __DIR__.'/../../../web/images';
+        $this['image.directory'] = __DIR__.'/../../../web/images/programs';
 
         $this->registerServiceProviders();
         $this->registerInternalServices();
