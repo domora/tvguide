@@ -76,6 +76,8 @@ class Application extends SilexApplication
 
     private function registerInternalServices()
     {
+        define("PROGRAMS_IMAGE_URI", $this['parameters']['uri']['programs']);
+        
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {
             return new Serializer($this['serializer']);

@@ -1,6 +1,6 @@
 {
     "parameters": {
-        "db" : {
+        "db": {
             "driver": "pdo_mysql",
             "host": "localhost",
             "name": "tvguide",
@@ -9,6 +9,10 @@
         },
         "tvscraper": {
             "proxy": "tcp://5.135.78.84:8888"
+        },
+        "uri": {
+            "programs": "http://localhost/marc/tvguide/images/programs",
+            "channels": "http://localhost/marc/tvguide/images/channels"
         }
     }
 }

@@ -59,7 +59,7 @@ class Program
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @Serializer\Exclude()
      */
     protected $image;
 
@@ -103,6 +103,19 @@ class Program
     public function getSerializedChannel()
     {
         return $this->channel->getId();
+    }
+    
+    /**
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("images")
+     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     */
+    public function getSerializedImages()
+    {
+        return [
+            'original' => sprintf("%s/%s.png", PROGRAMS_IMAGE_URI, $this->id),
+            'small' => sprintf("%s/%s_small.png", PROGRAMS_IMAGE_URI, $this->id),
+        ];
     }
 
     /**
