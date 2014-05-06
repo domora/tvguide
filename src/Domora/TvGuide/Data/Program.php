@@ -112,6 +112,8 @@ class Program
      */
     public function getSerializedImages()
     {
+        if (!$this->image) return null;
+        
         return [
             'original' => sprintf("%s/%s.png", PROGRAMS_IMAGE_URI, $this->id),
             'small' => sprintf("%s/%s_small.png", PROGRAMS_IMAGE_URI, $this->id),
