@@ -86,7 +86,10 @@ class Channel
      */
     public function getImage()
     {
-        return sprintf('%s/%s.png', 'images/channels', $this->id);
+        return [
+            'original' => sprintf("%s/%s/original.png", CHANNELS_IMAGE_URI, $this->id),
+            'small' => sprintf("%s/%s/small.png", CHANNELS_IMAGE_URI, $this->id),
+        ];
     }
 
     /**
