@@ -88,6 +88,7 @@ class Channel
     {
         return [
             'original' => sprintf("%s/%s/original.png", CHANNELS_IMAGE_URI, $this->id),
+            'medium' => sprintf("%s/%s/medium.png", CHANNELS_IMAGE_URI, $this->id),
             'small' => sprintf("%s/%s/small.png", CHANNELS_IMAGE_URI, $this->id),
         ];
     }
