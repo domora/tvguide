@@ -21,6 +21,14 @@ class Credits
     /**
      * @ORM\Column(type="array", nullable=true)
      * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="writer")
+     * @Serializer\Groups({"xmltv", "details"})
+     */
+    protected $writers;
+    
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
      * @Serializer\XmlList(inline=true, entry="actor")
      * @Serializer\Groups({"xmltv", "details"})
      */
@@ -34,51 +42,30 @@ class Credits
      */
     protected $presenters;
     
-    //~ /**
-     //~ * @Serializer\HandlerCallback("xml", direction="serialization")
-     //~ * @Serializer\Groups({"xmltv"})
-     //~ */
-    //~ public function serializeToXml(\JMS\Serializer\XmlSerializationVisitor $visitor)
-    //~ {
-        //~ if (empty($this->data)) return null;
-        //~ 
-        //~ $document = isset($visitor->document) ? $visitor->document : $visitor->createDocument(null, null, true);
-        //~ $root = $document->createElement('credits');
-        //~ 
-        //~ foreach ($this->data as $category => $entries) {
-            //~ foreach ($entries as $entry) {
-                //~ $node = $document->createElement($category);
-                //~ $node->appendChild($document->createTextNode($entry['name']));
-                //~ 
-                //~ if ($category == self::ACTOR && isset($entry['role'])) {
-                    //~ $role = $document->createAttribute("role");
-                    //~ $role->appendChild($document->createTextNode($entry['role']));
-                    //~ $node->appendChild($role);
-                //~ }
-                //~ 
-                //~ $root->appendChild($node);
-            //~ }
-        //~ }
-//~ 
-        //~ return $root;
-    //~ }
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="composer")
+     * @Serializer\Groups({"xmltv", "details"})
+     */
+    protected $composers;
     
-    //~ /**
-     //~ * @Serializer\HandlerCallback("xml", direction="deserialization")
-     //~ * @Serializer\Groups({"xmltv"})
-     //~ */
-    //~ public function deserializeFromXml(\JMS\Serializer\XmlDeserializationVisitor $visitor, $data)
-    //~ {
-        //~ var_dump($data);
-        //~ 
-        //~ foreach ($data->actor as $key => $value) {
-            //~ print $value."<br>";
-        //~ }
-    //~ }
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Serializer\Type("array<string>")
+     * @Serializer\XmlList(inline=true, entry="guest")
+     * @Serializer\Groups({"xmltv", "details"})
+     */
+    protected $guests;
     
     public function addDirector($director)
     {
         $this->directors[] = $director;
+    }
+    
+    public function addWriter($writer)
+    {
+        $this->writers[] = $writer;
     }
     
     public function addActor($name, $role = null)
@@ -89,5 +76,15 @@ class Credits
     public function addPresenter($presenter)
     {
         $this->presenters[] = $presenter;
+    }
+    
+    public function addComposer($composer)
+    {
+        $this->composers[] = $composer;
+    }
+    
+    public function addGuest($guest)
+    {
+        $this->guests[] = $guest;
     }
 }

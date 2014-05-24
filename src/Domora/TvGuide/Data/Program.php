@@ -17,6 +17,17 @@ class Program
 {
     use SluggifyTrait;
     
+    const CATEGORY_UNKNOWN = null;
+    const CATEGORY_MOVIE = 'movie';
+    const CATEGORY_SERIES = 'series';
+    const CATEGORY_DOCUMENTARY = 'documentary';
+    const CATEGORY_NEWS = 'news';
+    const CATEGORY_SPORT = 'sport';
+    const CATEGORY_TVSHOW = 'tvshow';
+    const CATEGORY_MUSIC = 'music';
+    const CATEGORY_TALKSHOW = 'talkshow';
+    const CATEGORY_ANIMATION = 'animation';
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=10)
@@ -119,6 +130,7 @@ class Program
         
         return [
             'original' => sprintf("%s/%s.png", PROGRAMS_IMAGE_URI, $this->id),
+            'medium' => sprintf("%s/%s_medium.png", PROGRAMS_IMAGE_URI, $this->id),
             'small' => sprintf("%s/%s_small.png", PROGRAMS_IMAGE_URI, $this->id),
         ];
     }
