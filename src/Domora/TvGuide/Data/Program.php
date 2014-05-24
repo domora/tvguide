@@ -5,6 +5,7 @@ namespace Domora\TvGuide\Data;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Domora\TvGuide\Data\Credits;
+use Domora\TvGuide\Service\SluggifyTrait;
 
 /**
  * @ORM\Entity
@@ -14,6 +15,8 @@ use Domora\TvGuide\Data\Credits;
  */
 class Program
 {
+    use SluggifyTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=10)
@@ -375,21 +378,5 @@ class Program
     public function getCredits()
     {
         return $this->credits;
-    }
-    
-    private function sluggify($text)
-    {
-        // Replaces non letter or digits by -
-        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
-        $text = trim($text, '-');
-        
-        // Transliterates
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        
-        // Lowercase
-        $text = strtolower($text);
-        
-        // Removes unwanted characters
-        return preg_replace('~[^-\w]+~', '', $text);
     }
 }
