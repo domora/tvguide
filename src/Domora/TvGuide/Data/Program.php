@@ -57,9 +57,10 @@ class Program
     protected $subtitle;
     
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Serializer\Type("string")
-     * @Serializer\Groups({"schedule", "xmltv", "details"})
+     * @ORM\Embedded(class="Episode")
+     * @Serializer\Type("Domora\TvGuide\Data\Episode")
+     * @Serializer\Groups({"xmltv", "details"})
+     * @Serializer\Inline()
      */
     protected $episode;
     
@@ -297,29 +298,6 @@ class Program
     }
 
     /**
-     * Set episode
-     *
-     * @param string $episode
-     * @return Program
-     */
-    public function setEpisode($episode)
-    {
-        $this->episode = $episode;
-
-        return $this;
-    }
-
-    /**
-     * Get episode
-     *
-     * @return string 
-     */
-    public function getEpisode()
-    {
-        return $this->episode;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -373,9 +351,9 @@ class Program
      * Set credits
      *
      * @param Credits $credits
-     * @return Credits
+     * @return Program
      */
-    public function setCredits($credits)
+    public function setCredits(Credits $credits)
     {
         $this->credits = $credits;
 
@@ -390,5 +368,28 @@ class Program
     public function getCredits()
     {
         return $this->credits;
+    }
+    
+    /**
+     * Set episode
+     *
+     * @param Episode $episode
+     * @return Program
+     */
+    public function setEpisode(Episode $episode)
+    {
+        $this->episode = $episode;
+
+        return $this;
+    }
+
+    /**
+     * Get episode
+     *
+     * @return Episode 
+     */
+    public function getEpisode()
+    {
+        return $this->episode;
     }
 }
