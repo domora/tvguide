@@ -12,6 +12,7 @@ use Goutte\Client;
 use Domora\Silex\Provider\DoctrineORMServiceProvider;
 use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
+use Domora\TvGuide\Service\Wikipedia;
 use Domora\TvGuide\Service\DateTimeSerializer;
 
 use Domora\TvGuide\Provider\FranceTelevision;
@@ -32,10 +33,10 @@ class Application extends SilexApplication
 
     private function registerServiceProviders()
     {
-        $env = getenv('APP_ENV') ?: 'prod';
-        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/$env.json"));
-
         $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/config.json"));
+        
+        $env = $this['environment'] ?: 'prod';
+        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/$env.json"));
 
         $this->register(new DoctrineServiceProvider(), [
             'db.options' => [
@@ -96,6 +97,10 @@ class Application extends SilexApplication
             
             return $client;
         };
+
+        $this['wikipedia'] = $this->share(function() {
+            return new Wikipedia();
+        });
         
         $this['provider.francetv'] = $this->share(function() {
             return new FranceTelevision($this['scraper.client'], $this['orm.em']);

@@ -35,7 +35,8 @@ class Credits
     protected $actors;
     
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_presenters")
      * @Serializer\Type("array<string>")
      * @Serializer\XmlList(inline=true, entry="presenter")
      * @Serializer\Groups({"xmltv", "details"})
@@ -57,6 +58,11 @@ class Credits
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $guests;
+
+    public function __construct()
+    {
+        $this->presenters = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
     public function addDirector($director)
     {

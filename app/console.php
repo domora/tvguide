@@ -5,6 +5,7 @@ $loader = require_once __DIR__ . '/../vendor/autoload.php';
 use Domora\TvGuide\Command\UpdateDatabaseCommand;
 use Domora\TvGuide\Command\RunTasksCommand;
 use Domora\TvGuide\Command\ParseCommand;
+use Domora\TvGuide\Command\UpdatePersonCommand;
 
 use Symfony\Component\Console\Application as ConsoleApplication;
 
@@ -18,4 +19,5 @@ $console = new ConsoleApplication();
 $console->add(new UpdateDatabaseCommand($silex));
 $console->add(new RunTasksCommand($silex));
 $console->add(new ParseCommand($silex));
+$console->add(new UpdatePersonCommand($silex));
 $console->run();
