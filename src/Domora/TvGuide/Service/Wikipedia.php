@@ -73,7 +73,10 @@ class Wikipedia
             return null;
         }
         
-        if (false === ($month = array_search($matches[2], $months))) {
+        if (is_numeric($matches[2])) {
+            $month = (int) $matches[2];
+        }        
+        else if (false === ($month = array_search(strtolower($matches[2]), $months))) {
             throw new \Exception(sprintf('unable to translate the month "%s"', $matches[2]));
         }
         
