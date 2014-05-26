@@ -8,7 +8,7 @@ class Wikipedia
 {
     public function updatePerson(Person $person)
     {
-        $uri = 'http://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages|revisions&exintro=&rvprop=content&rvsection=0&';
+        $uri = 'http://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages|revisions&exintro=&rvprop=content&rvsection=0&redirects&';
 
         if ($person->getWikipediaId()) {
             $uri .= 'pageids=' . $person->getWikipediaId();

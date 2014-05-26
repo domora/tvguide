@@ -19,7 +19,7 @@ class Person
     private $id;
 
     /**
-     * @ORM\Column(type="integer", name="wikipedia_id")
+     * @ORM\Column(type="integer", name="wikipedia_id", nullable=true)
      * @Serializer\Exclude()
      */
     private $wikipediaId;
@@ -38,6 +38,7 @@ class Person
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
      * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
      */
     protected $birthDate;
