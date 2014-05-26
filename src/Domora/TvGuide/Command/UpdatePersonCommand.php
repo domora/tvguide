@@ -56,9 +56,13 @@ class UpdatePersonCommand extends Command
         }
 
         foreach ($persons as $person) {
-            $wikipedia->updatePerson($person);
-            $person->setLastUpdate(new \DateTime());
-            $output->writeln(sprintf('<info>%s</info> has been updated', $person->getName()));
+            try {
+                $wikipedia->updatePerson($person);
+                $person->setLastUpdate(new \DateTime());
+                $output->writeln(sprintf('<info>%s</info> has been updated', $person->getName()));
+            } catch(\Exception $e) {
+                $output->writeln(sprintf('<error>"%s"</error>, skipping update of %s', $e->getMessage(), $person->getName()));
+            }
         }
 
         $em->flush();
