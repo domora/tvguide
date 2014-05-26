@@ -1,8 +1,0 @@
-<IfModule mod_rewrite.c>
-    Options -MultiViews
-
-    RewriteEngine On
-    RewriteBase /marc/tvguide
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [QSA,L]
-</IfModule>
