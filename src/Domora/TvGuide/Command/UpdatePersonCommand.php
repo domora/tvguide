@@ -27,7 +27,14 @@ class UpdatePersonCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Numbers of persons to update',
                 1
-            );
+            )
+            ->addOption(
+                'since',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Ignore persons who have already been updated in the given interval',
+                '-1 day'
+            ); 
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,14 +43,22 @@ class UpdatePersonCommand extends Command
         $wikipedia = $this->app['wikipedia'];
         $dialog = $this->getHelperSet()->get('dialog');
         $numbers = $input->getOption('numbers');
+        $since = new \DateTime($input->getOption('since'));
 
-        $persons = $em->createQuery('SELECT p FROM Domora\TvGuide\Data\Person p ORDER BY p.lastUpdate ASC')
+        $persons = $em->createQuery('SELECT p FROM Domora\TvGuide\Data\Person p WHERE p.lastUpdate is NULL OR p.lastUpdate < :since ORDER BY p.lastUpdate ASC')
+            ->setParameter('since', $since)
             ->setMaxResults($numbers)
             ->getResult();
+            
+        if (sizeof($persons) == 0) {
+            $output->writeln('no persons to update');
+            return;
+        }
 
         foreach ($persons as $person) {
             $wikipedia->updatePerson($person);
             $person->setLastUpdate(new \DateTime());
+            $output->writeln(sprintf('<info>%s</info> has been updated', $person->getName()));
         }
 
         $em->flush();
