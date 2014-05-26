@@ -7,7 +7,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="person")
+ * @ORM\Table(name="person", indexes={@ORM\Index(name="name_index", columns={"name"})})
  */
 class Person
 {
