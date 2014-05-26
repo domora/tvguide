@@ -45,7 +45,7 @@ class Person
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Serializer\Exclude()
+     * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
      */
     private $image;
 
