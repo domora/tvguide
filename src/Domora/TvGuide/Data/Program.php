@@ -161,6 +161,11 @@ class Program
         $this->guests = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    public function __toString()
+    {
+         return sprintf('%s at %s, on %s', $this->title, $this->start->format(\DateTime::ISO8601), $this->channel->getName());
+    }
+    
     /**
      * @Serializer\VirtualProperty
      * @Serializer\SerializedName("channel")
