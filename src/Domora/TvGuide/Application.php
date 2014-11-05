@@ -14,7 +14,7 @@ use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\Wikipedia;
 use Domora\TvGuide\Service\DateTimeSerializer;
-
+use Domora\TvGuide\Service\EntityProviderFactory;
 use Domora\TvGuide\Provider\FranceTelevision;
 
 class Application extends SilexApplication
@@ -83,6 +83,10 @@ class Application extends SilexApplication
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {
             return new Serializer($this['serializer']);
+        });
+        
+        $this['entity.provider'] = $this->share(function() {
+            return new EntityProviderFactory($this['orm.em']); 
         });
         
         // Custom goutte client
