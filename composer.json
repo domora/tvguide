@@ -1,6 +1,6 @@
 {
     "require": {
-        "silex/silex": "~1.1",
+        "silex/silex": "1.2.*",
         "doctrine/dbal": "2.5.*@dev",
         "doctrine/orm": "dev-master",
         "symfony/console": "2.3.*",

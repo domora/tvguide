@@ -3,6 +3,7 @@
 namespace Domora\TvGuide\Service;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Domora\TvGuide\Error\Error;
 
 class EntityProviderFactory
 {
@@ -25,7 +26,7 @@ class EntityProviderFactory
         $entity = $this->em->find($entityName, $id);
 
         if (!$entity) {
-            throw new NotFoundHttpException('unable to find the requested program');
+            throw new Error(404, 'ENTITY_NOT_FOUND');
         }
         
         return $entity;

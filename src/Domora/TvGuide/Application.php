@@ -4,6 +4,7 @@ namespace Domora\TvGuide;
 
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
 use Igorw\Silex\ConfigServiceProvider;
@@ -29,6 +30,7 @@ class Application extends SilexApplication
 
         $this->registerServiceProviders();
         $this->registerInternalServices();
+        $this->registerControllers();
     }
 
     private function registerServiceProviders()
@@ -37,6 +39,8 @@ class Application extends SilexApplication
         
         $env = $this['environment'] ?: 'prod';
         $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/$env.json"));
+        
+        $this->register(new ServiceControllerServiceProvider());
 
         $this->register(new DoctrineServiceProvider(), [
             'db.options' => [
@@ -108,6 +112,17 @@ class Application extends SilexApplication
         
         $this['provider.francetv'] = $this->share(function() {
             return new FranceTelevision($this['scraper.client'], $this['orm.em']);
+        });
+    }
+    
+    private function registerControllers()
+    {
+        $this['controller.channel'] = $this->share(function() {
+            return new Controller\ChannelController($this['orm.em'], $this['api.serializer']); 
+        });
+        
+        $this['controller.program'] = $this->share(function() {
+            return new Controller\ProgramController($this['orm.em'], $this['api.serializer']); 
         });
     }
 }

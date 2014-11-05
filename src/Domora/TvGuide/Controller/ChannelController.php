@@ -2,39 +2,17 @@
 
 namespace Domora\TvGuide\Controller;
 
-use Silex\Application;
-use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use JMS\Serializer\DeserializationContext;
 use Doctrine\Common\Collections\Criteria;
 
-use Domora\TvGuide\Data\Program;
 use Domora\TvGuide\Data\Channel;
-use Domora\TvGuide\Data\Schedule;
 
-class ChannelController implements ControllerProviderInterface
+class ChannelController extends AbstractController
 {
     const CHANNEL_ENTITY = 'Domora\TvGuide\Data\Channel';
     
-    public function connect(Application $app)
-    {
-        $controllers = $app['controllers_factory'];
-        
-        $this->em = $app['orm.em'];
-        $this->serializer = $app['api.serializer'];
-        
-        $provider = $app['entity.provider']
-            ->getProvider(self::CHANNEL_ENTITY);
-        
-        $controllers->get('/channels', array($this, 'getChannels'));
-        $controllers->get('/channels/{channel}', array($this, 'getChannel'))
-            ->convert('channel', $provider);
-
-        return $controllers;
-    }
-    
-    public function getChannels(Request $request)
+    public function getChannelsAction(Request $request)
     {
         $country = $request->get('country');
         $qb = $this->em->createQueryBuilder();
@@ -52,7 +30,7 @@ class ChannelController implements ControllerProviderInterface
         return $this->serializer->response($channels, ['details']);
     }
     
-    public function getChannel(Channel $channel)
+    public function getChannelAction(Channel $channel)
     {
         return $this->serializer->response($channel, ['details']);
     }
