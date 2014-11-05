@@ -8,5 +8,6 @@ $app = new Domora\TvGuide\Application();
 
 umask(0000);
 
+$app->mount('/v1', new Domora\TvGuide\Controller\ChannelController());
 $app->mount('/v1', new Domora\TvGuide\Controller\ControllerProvider());
 $app->run();
