@@ -30,16 +30,21 @@ class DateTimeSerializer implements SubscribingHandlerInterface
                 'type' => 'DateTime',
                 'method' => 'deserializeXmlDateTime',
             ),
+            array(
+                'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
+                'format' => 'json',
+                'type' => 'DateTime',
+                'method' => 'deserializeDateTime',
+            ),
         );
     }
 
     public function serializeDateTime($visitor, \DateTime $date, array $type, Context $context)
     {
         $groups = $context->attributes->get('groups');
-        $isXmlTv = in_array('xmltv', $groups->get());
 
         // Returns date in the XMLTV format
-        if ($isXmlTv) {
+        if (in_array('xmltv', $groups->getOrElse([]))) {
             return $date->format('YmdHis O');
         }
 
@@ -50,6 +55,11 @@ class DateTimeSerializer implements SubscribingHandlerInterface
         
         // Returns date in the UNIX format
         return (int) $date->getTimestamp();
+    }
+    
+    public function deserializeDateTime($visitor, $value, array $params, Context $context)
+    {
+        return \DateTime::createFromFormat('U', $value);
     }
     
     public function deserializeXmlDateTime($visitor, \SimpleXMLElement $xml, array $params, Context $context)

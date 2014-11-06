@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Domora\TvGuide\Data\Program;
+use Domora\TvGuide\Response\Success;
 
 class ProgramController extends AbstractController
 {
@@ -76,5 +77,11 @@ class ProgramController extends AbstractController
     public function getProgramAction(Program $program)
     {
         return $this->serializer->response($program, ['details']);
+    }
+    
+    public function deleteProgramAction(Program $program)
+    {
+        $this->em->remove($program);
+        return $this->serializer->response(new Success(200, 'PROGRAM_REMOVED'));
     }
 }

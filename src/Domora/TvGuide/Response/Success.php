@@ -2,14 +2,31 @@
 
 namespace Domora\TvGuide\Response;
 
+use JMS\Serializer\Annotation as Serializer;
+
 class Success
 {
-    private $responseCode;
-    private $httpCode;
+    /**
+     * @Serializer\Type("string")
+     * @Serializer\SerializedName("status")
+     */
+    protected $statusCode;
     
-    public function __construct($httpCode, $responseCode)
+    /**
+     * @Serializer\Type("integer")
+     * @Serializer\SerializedName("code")
+     */
+    protected $httpCode;
+    
+    /**
+     * @Serializer\Expose()
+     */
+    protected $data;
+    
+    public function __construct($httpCode, $statusCode, $data = null)
     {
-        $this->responseCode = $responseCode;
+        $this->statusCode = $statusCode;
         $this->httpCode = $httpCode;
+        $this->data = $data;
     }
 }

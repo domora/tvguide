@@ -2,12 +2,19 @@
 
 namespace Domora\TvGuide\Response;
 
+use JMS\Serializer\Annotation as Serializer;
+
 class Error extends \Exception
 {
-    public function __construct($httpResponseCode, $errorCode, \Exception $previous = null)
+    public $statusCode;
+    public $httpCode;
+    
+    public function __construct($httpCode, $statusCode, \Exception $previous = null)
     {
-        $this->code = $errorCode;
-        $message = sprintf('API Error %d, "%s"', $httpResponseCode, $errorCode);
-        parent::__construct($message, $httpResponseCode, $previous);
+        $this->statusCode = $statusCode;
+        $this->httpCode = $httpCode;
+        
+        $message = sprintf('API Error %d, "%s"', $httpCode, $statusCode);
+        parent::__construct($message, $httpCode, $previous);
     }
 }

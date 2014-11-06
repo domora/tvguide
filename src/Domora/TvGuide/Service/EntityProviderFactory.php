@@ -3,7 +3,7 @@
 namespace Domora\TvGuide\Service;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Domora\TvGuide\Error\Error;
+use Domora\TvGuide\Response\Error;
 
 class EntityProviderFactory
 {

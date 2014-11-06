@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\Criteria;
 
 use Domora\TvGuide\Data\Channel;
+use Domora\TvGuide\Data\Program;
+use Domora\TvGuide\Response\Success;
 
 class ChannelController extends AbstractController
 {
@@ -33,5 +35,19 @@ class ChannelController extends AbstractController
     public function getChannelAction(Channel $channel)
     {
         return $this->serializer->response($channel, ['details']);
+    }
+    
+    // @todo handle error cases
+    public function postChannelProgramsAction(Request $request, Channel $channel)
+    {
+        $program = $this->serializer->deserialize($request->getContent(), ProgramController::PROGRAM_ENTITY, 'json');
+        $program->setChannel($channel);
+        $channel->addProgram($program);
+        $program->generateUniqueId();
+        $this->em->persist($program);
+        
+        $response = new Success(200, 'PROGRAM_CREATED', $program);
+        
+        return $this->serializer->response($response);
     }
 }
