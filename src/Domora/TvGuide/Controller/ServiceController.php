@@ -27,11 +27,11 @@ class ServiceController extends AbstractController
             
         $services = $query->getQuery()->getResult();
             
-        return $this->serializer->response($services, ['list']);
+        return $this->serializer->serialize($services, ['list']);
     }
     
     public function getServiceAction(Service $service)
     {
-        return $this->serializer->response($service, ['list']);
+        return $this->serializer->serialize($service, ['list']);
     }
 }

@@ -28,24 +28,6 @@ class Serializer
     {
         $this->format = $format;
     }
-
-    public function response($data, array $groups = null)
-    {
-        $context = SerializationContext::create()
-            ->setVersion(1);
-
-        if ($groups) {
-            $context->setGroups($groups);
-        }
-
-        $body = $this->serializer->serialize($data, $this->format, $context);
-
-        if (!$body) {
-            return $this->buildResponse("Unable to serialize object", 500);
-        }
-
-        return $this->buildResponse($body, 200);
-    }
     
     public function deserialize($data, $class, $type)
     {
@@ -84,19 +66,6 @@ class Serializer
         $body = $this->serializer->serialize($data, $this->format);
         
         return $this->buildResponse($body, $code);
-    }
-    
-    public function success($http, $status, $data = null)
-    {
-        $response = [
-            "status" => $status,
-            "code" => $http,
-            "data" => $data
-        ];
-
-        $body = $this->serializer->serialize($data, $this->format);
-        
-        return $this->buildResponse($body, $http);
     }
 
     private function buildResponse($body, $status)

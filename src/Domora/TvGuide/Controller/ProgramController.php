@@ -71,17 +71,17 @@ class ProgramController extends AbstractController
         $schedule->setChannels($channels);
         $mode = $request->get('xmltv') ? ['xmltv'] : ['schedule'];
         
-        return $this->serializer->response($schedule, $mode);
+        return $this->serializer->serialize($schedule, $mode);
     }
     
     public function getProgramAction(Program $program)
     {
-        return $this->serializer->response($program, ['details']);
+        return $this->serializer->serialize($program, ['details']);
     }
     
     public function deleteProgramAction(Program $program)
     {
         $this->em->remove($program);
-        return $this->serializer->response(new Success(200, 'PROGRAM_REMOVED'));
+        return $this->serializer->serialize(new Success(200, 'PROGRAM_REMOVED'));
     }
 }

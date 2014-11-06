@@ -29,12 +29,12 @@ class ChannelController extends AbstractController
             
         $channels = $query->getQuery()->getResult();
             
-        return $this->serializer->response($channels, ['details']);
+        return $this->serializer->serialize($channels, ['details']);
     }
     
     public function getChannelAction(Channel $channel)
     {
-        return $this->serializer->response($channel, ['details']);
+        return $this->serializer->serialize($channel, ['details']);
     }
     
     // @todo handle error cases
@@ -48,6 +48,6 @@ class ChannelController extends AbstractController
         
         $response = new Success(200, 'PROGRAM_CREATED', $program);
         
-        return $this->serializer->response($response);
+        return $this->serializer->serialize($response);
     }
 }
