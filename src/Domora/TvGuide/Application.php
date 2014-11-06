@@ -124,5 +124,9 @@ class Application extends SilexApplication
         $this['controller.program'] = $this->share(function() {
             return new Controller\ProgramController($this['orm.em'], $this['api.serializer']); 
         });
+        
+        $this['controller.service'] = $this->share(function() {
+            return new Controller\ServiceController($this['orm.em'], $this['api.serializer']); 
+        });
     }
 }
