@@ -18,6 +18,10 @@ use Domora\TvGuide\Service\DateTimeSerializer;
 use Domora\TvGuide\Service\EntityProviderFactory;
 use Domora\TvGuide\Provider\FranceTelevision;
 
+use Domora\TvGuide\Controller\ChannelController;
+use Domora\TvGuide\Controller\ProgramController;
+use Domora\TvGuide\Controller\ServiceController;
+
 class Application extends SilexApplication
 {
     public function __construct()
@@ -31,6 +35,26 @@ class Application extends SilexApplication
         $this->registerServiceProviders();
         $this->registerInternalServices();
         $this->registerControllers();
+    }
+    
+    public function loadRoutes()
+    {
+        $channelProvider = $this['entity.provider']->getProvider(ChannelController::CHANNEL_ENTITY);
+        $programProvider = $this['entity.provider']->getProvider(ProgramController::PROGRAM_ENTITY);
+        $serviceProvider = $this['entity.provider']->getProvider(ServiceController::SERVICE_ENTITY);
+
+        $api = $this['controllers_factory'];
+
+        $api->get('/channels', 'controller.channel:getChannelsAction');
+        $api->get('/channels/{channel}', 'controller.channel:getChannelAction')->convert('channel', $channelProvider);
+
+        $api->get('/programs', 'controller.program:getProgramsAction');
+        $api->get('/programs/{program}', 'controller.program:getProgramAction')->convert('program', $programProvider);
+
+        $api->get('/services', 'controller.service:getServicesAction');
+        $api->get('/services/{service}', 'controller.service:getServiceAction')->convert('service', $serviceProvider);
+
+        $this->mount('/v1', $api);
     }
 
     private function registerServiceProviders()
