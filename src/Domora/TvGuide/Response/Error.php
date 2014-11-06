@@ -1,6 +1,6 @@
 <?php
 
-namespace Domora\TvGuide\Error;
+namespace Domora\TvGuide\Response;
 
 class Error extends \Exception
 {
