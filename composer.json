@@ -11,8 +11,9 @@
         "igorw/config-service-provider": "1.2.*@dev"
     },
     "autoload": {
-        "psr-0": {
-            "Domora": "src/"
+        "psr-4": {
+            "Domora\\": "src/Domora/",
+            "Domora\\Tests\\": "tests/"
         }
     }
 }

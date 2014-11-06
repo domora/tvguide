@@ -7,10 +7,11 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false">
+         syntaxCheck="false"
+         bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite name="Domora TV Guide Test Suite">
-            <directory>./src/Domora/TvGuide/Tests</directory>
+            <directory>./tests/TvGuide</directory>
         </testsuite>
     </testsuites>
 </phpunit>
