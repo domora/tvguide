@@ -2,6 +2,12 @@
 
 namespace Domora\Tests;
 
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\Common\DataFixtures\Loader;
+
+use Domora\Tests\DataFixtures;
+
 abstract class WebTestCase extends \Silex\WebTestCase
 {
     public function createApplication()
@@ -19,5 +25,21 @@ abstract class WebTestCase extends \Silex\WebTestCase
         umask(0000);
         
         return $app;
+    }
+    
+    public function setUp()
+    {
+        parent::setUp();
+        $this->loadFixtures();
+    }
+    
+    protected function loadFixtures()
+    {
+        $loader = new Loader();
+        $loader->addFixture(new DataFixtures);
+        
+        $purger = new ORMPurger();
+        $executor = new ORMExecutor($this->app['orm.em'], $purger);
+        $executor->execute($loader->getFixtures());
     }
 }
