@@ -57,7 +57,7 @@ class Application extends SilexApplication
         $api->get('/services', 'controller.service:getServicesAction');
         $api->get('/services/{service}', 'controller.service:getServiceAction')->convert('service', $serviceProvider);
         
-        $this->error(function(\Exception $e, $code) {
+        $this->error(function(Error $e, $code) {
             return $this['api.serializer']->serialize($e);
         });
 
