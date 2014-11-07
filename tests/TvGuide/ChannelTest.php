@@ -34,6 +34,15 @@ class ChannelControllerTest extends WebTestCase
         $this->assertEquals($channelId, $json['id']);
     }
 
+    public function testGetWrongChannel()
+    {
+        $client = $this->createClient();
+
+        $wrongChannelId = 'fake-id';
+        $client->request('GET', '/v1/channels/' . $wrongChannelId);
+        $this->assertFalse($client->getResponse()->isOk());
+    }
+
     public function testCreateProgramInChannel()
     {
         $client = $this->createClient();
@@ -66,15 +75,25 @@ class ChannelControllerTest extends WebTestCase
 
     public function testCreateWrongProgramInChannel()
     {
-        $this->markTestSkipped('todo in channelController.');
+        $this->markTestSkipped('todo : handle errors in channelController.');
 
         $client = $this->createClient();
 
-        // Create a wrong program
+        // Fail to create wrong programs
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
         ]));
-        
-        $response = $client->getResponse();
-        $this->assertFalse($response->isOk());
+        $this->assertFalse($client->getResponse()->isOk());
+
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'stop' => 1415295600
+        ]));
+        $this->assertFalse($client->getResponse()->isOk());
+
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => 1415289600
+        ]));
+        $this->assertFalse($client->getResponse()->isOk());
     }
 }
