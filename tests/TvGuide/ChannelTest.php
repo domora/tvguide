@@ -4,7 +4,7 @@ namespace Domora\Tests\TvGuide;
 
 use Domora\Tests\WebTestCase;
 
-class ChannelControllerTest extends WebTestCase
+class ChannelTest extends WebTestCase
 {
     public function testGetChannelsList()
     {
@@ -50,8 +50,8 @@ class ChannelControllerTest extends WebTestCase
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'start' => 1415289600,
-            'stop' => 1415295600
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
         ]));
         
         $response = $client->getResponse();
@@ -65,8 +65,8 @@ class ChannelControllerTest extends WebTestCase
         // Create a program
         $client->request('POST', '/v1/channels/fake-id/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'start' => 1415289600,
-            'stop' => 1415295600
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
         ]));
         
         $response = $client->getResponse();
@@ -86,13 +86,13 @@ class ChannelControllerTest extends WebTestCase
 
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'stop' => 1415295600
+            'stop' => date('c')
         ]));
         $this->assertFalse($client->getResponse()->isOk());
 
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'start' => 1415289600
+            'start' => date('c')
         ]));
         $this->assertFalse($client->getResponse()->isOk());
     }

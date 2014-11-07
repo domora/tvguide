@@ -29,8 +29,8 @@ class ProgramTest extends WebTestCase
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'start' => 1415289600,
-            'stop' => 1415295600
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
         ]));
         
         $response = $client->getResponse();
@@ -79,8 +79,8 @@ class ProgramTest extends WebTestCase
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
-            'start' => 1415289600,
-            'stop' => 1415295600,
+            'start' => date('c', time() - 3600),
+            'stop' => date('c'),
             'image' => sprintf('%s/../Data/domora.jpg', dirname(__FILE__))
         ]));
         
