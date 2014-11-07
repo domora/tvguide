@@ -5,6 +5,7 @@ namespace Domora\TvGuide;
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
 use Igorw\Silex\ConfigServiceProvider;
@@ -60,16 +61,24 @@ class Application extends SilexApplication
         $this->error(function(Error $e, $code) {
             return $this['api.serializer']->serialize($e);
         });
-
+        
         $this->mount('/v1', $api);
     }
 
     private function registerServiceProviders()
     {
-        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/config.json"));
+        $root = __DIR__ . "/../../..";
+        $configurationVars = [
+            'root' => $root,
+            'uri' => sprintf('%s://%s%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTP_HOST'], dirname($_SERVER['SCRIPT_NAME']))
+        ];
         
+        // Load user global configuration
+        $this->register(new ConfigServiceProvider("$root/app/config/config.json", $configurationVars));
+        
+        // Load environment configuration
         $env = $this['environment'] ?: 'prod';
-        $this->register(new ConfigServiceProvider(__DIR__."/../../../app/config/$env.json"));
+        $this->register(new ConfigServiceProvider("$root/app/config/$env.json", $configurationVars));
         
         $this->register(new ServiceControllerServiceProvider());
 
@@ -112,8 +121,8 @@ class Application extends SilexApplication
 
     private function registerInternalServices()
     {
-        define("PROGRAMS_IMAGE_URI", $this['parameters']['uri']['programs']);
-        define("CHANNELS_IMAGE_URI", $this['parameters']['uri']['channels']);
+        define("TVGUIDE_IMAGES_DIRECTORY", $this['parameters']['images']['directory']);
+        define("TVGUIDE_IMAGES_BASE_URI", $this['parameters']['images']['baseUri']);
         
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {

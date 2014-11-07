@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Domora\TvGuide\Data\Credits;
 use Domora\TvGuide\Service\SluggifyTrait;
+use Domora\TvGuide\Service\ImageContentTrait;
 
 /**
  * @ORM\Entity
@@ -16,6 +17,7 @@ use Domora\TvGuide\Service\SluggifyTrait;
 class Program
 {
     use SluggifyTrait;
+    use ImageContentTrait;
     
     const CATEGORY_UNKNOWN = null;
     const CATEGORY_MOVIE = 'movie';
@@ -70,13 +72,6 @@ class Program
      * @Serializer\Groups({"schedule", "xmltv", "details"})
      */
     protected $category;
-    
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Serializer\Type("string")
-     * @Serializer\Exclude()
-     */
-    protected $image;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -184,13 +179,7 @@ class Program
      */
     public function getSerializedImages()
     {
-        if (!$this->image) return null;
-        
-        return [
-            'original' => sprintf("%s/%s.png", PROGRAMS_IMAGE_URI, $this->id),
-            'medium' => sprintf("%s/%s_medium.png", PROGRAMS_IMAGE_URI, $this->id),
-            'small' => sprintf("%s/%s_small.png", PROGRAMS_IMAGE_URI, $this->id),
-        ];
+        return $this->getImages();
     }
 
     /**
@@ -283,29 +272,6 @@ class Program
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     * @return Program
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string 
-     */
-    public function getImage()
-    {
-        return $this->image;
     }
 
     /**

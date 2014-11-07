@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use JMS\Serializer\Annotation as Serializer;
+use Domora\TvGuide\Service\ImageContentTrait;
 
 /**
  * @ORM\Entity
@@ -14,6 +15,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class Channel
 {
+    use ImageContentTrait;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
@@ -84,13 +87,9 @@ class Channel
      * @Serializer\SerializedName("image")
      * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
      */
-    public function getImage()
+    public function getSerializedImages()
     {
-        return [
-            'original' => sprintf("%s/%s/original.png", CHANNELS_IMAGE_URI, $this->id),
-            'medium' => sprintf("%s/%s/medium.png", CHANNELS_IMAGE_URI, $this->id),
-            'small' => sprintf("%s/%s/small.png", CHANNELS_IMAGE_URI, $this->id),
-        ];
+        return $this->getImages();
     }
 
     /**
