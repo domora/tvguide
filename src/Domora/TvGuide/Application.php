@@ -19,6 +19,7 @@ use Domora\TvGuide\Service\DateTimeSerializer;
 use Domora\TvGuide\Service\EntityProviderFactory;
 use Domora\TvGuide\Provider\FranceTelevision;
 
+use Domora\TvGuide\Service\ImageContentTrait;
 use Domora\TvGuide\Response\Error;
 use Domora\TvGuide\Controller\ChannelController;
 use Domora\TvGuide\Controller\ProgramController;
@@ -123,9 +124,9 @@ class Application extends SilexApplication
 
     private function registerInternalServices()
     {
-        define("TVGUIDE_IMAGES_DIRECTORY", $this['parameters']['images']['directory']);
-        define("TVGUIDE_IMAGES_BASE_URI", $this['parameters']['images']['baseUri']);
-        
+        ImageContentTrait::$imagesDirectory = $this['parameters']['images']['directory'];
+        ImageContentTrait::$imagesBaseUri = $this['parameters']['images']['baseUri'];
+            
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {
             return new Serializer($this['serializer']);

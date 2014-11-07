@@ -4,9 +4,12 @@ namespace Domora\TvGuide\Service;
 
 trait ImageContentTrait
 {
+    public static $imagesDirectory;
+    public static $imagesBaseUri;
+    
     public function hasImages()
     {
-        return file_exists(sprintf('%s/%s/%s/original.png', TVGUIDE_IMAGES_DIRECTORY, $this->getImagesDirectoryName(), $this->id));
+        return file_exists(sprintf('%s/%s/%s/original.png', self::$imagesDirectory, $this->getImagesDirectoryName(), $this->id));
     }
     
     public function removeImages()
@@ -20,9 +23,9 @@ trait ImageContentTrait
         
         
         return [
-            'original' => sprintf("%s/%s/%s/original.png", TVGUIDE_IMAGES_BASE_URI, $this->getImagesDirectoryName(), $this->id),
-            'medium' => sprintf("%s/%s/%s/medium.png", TVGUIDE_IMAGES_BASE_URI, $this->getImagesDirectoryName(), $this->id),
-            'small' => sprintf("%s/%s/%s/small.png", TVGUIDE_IMAGES_BASE_URI, $this->getImagesDirectoryName(), $this->id),
+            'original' => sprintf("%s/%s/%s/original.png", self::$imagesBaseUri, $this->getImagesDirectoryName(), $this->id),
+            'medium' => sprintf("%s/%s/%s/medium.png", self::$imagesBaseUri, $this->getImagesDirectoryName(), $this->id),
+            'small' => sprintf("%s/%s/%s/small.png", self::$imagesBaseUri, $this->getImagesDirectoryName(), $this->id),
         ];
     }
     
@@ -52,15 +55,15 @@ trait ImageContentTrait
             return $image_p;
         };
         
-        $directory = sprintf('%s/%s/%s', TVGUIDE_IMAGES_DIRECTORY, $this->getImagesDirectoryName(), $this->id);
+        $directory = sprintf('%s/%s/%s', self::$imagesDirectory, $this->getImagesDirectoryName(), $this->id);
         
         $image = imagecreatefromjpeg($url);
         imagepng($image, "$directory/original.png", 9);
         
-        $medium = $provider->resizeImage($image, 300, 300);
+        $medium = $resizeImage($image, 300, 300);
         imagepng($medium, "$directory/medium.png", 7);
         
-        $small = $provider->resizeImage($image, 200, 200);
+        $small = $resizeImage($image, 200, 200);
         imagepng($small, "$directory/small.png", 7);
     }
     
