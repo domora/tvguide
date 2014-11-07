@@ -41,7 +41,7 @@ class Channel
     private $country;
 
     /**
-     * @ORM\OneToMany(targetEntity="Program", mappedBy="channel")
+     * @ORM\OneToMany(targetEntity="Program", mappedBy="channel", cascade={"persist"})
      * @Serializer\Type("array<Domora\TvGuide\Data\Program>")
      * @Serializer\Accessor(getter="getPrograms")
      * @Serializer\Groups({"schedule"})

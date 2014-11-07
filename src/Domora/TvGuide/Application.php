@@ -17,7 +17,6 @@ use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\Wikipedia;
 use Domora\TvGuide\Service\DateTimeSerializer;
 use Domora\TvGuide\Service\EntityProviderFactory;
-use Domora\TvGuide\Provider\FranceTelevision;
 
 use Domora\TvGuide\Service\ImageContentTrait;
 use Domora\TvGuide\Response\Error;
@@ -151,10 +150,6 @@ class Application extends SilexApplication
 
         $this['wikipedia'] = $this->share(function() {
             return new Wikipedia();
-        });
-        
-        $this['provider.francetv'] = $this->share(function() {
-            return new FranceTelevision($this['scraper.client'], $this['orm.em']);
         });
     }
     

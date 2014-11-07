@@ -82,6 +82,8 @@ class ProgramController extends AbstractController
     public function deleteProgramAction(Program $program)
     {
         $this->em->remove($program);
+        $this->em->flush();
+        
         return $this->serializer->serialize(new Success(200, 'PROGRAM_REMOVED'));
     }
 }
