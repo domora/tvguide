@@ -59,7 +59,8 @@ class Serializer
             $code = $data->httpCode;
             $data = [
                 "status" => $data->statusCode,
-                "code" => $data->httpCode
+                "code" => $data->httpCode,
+                "message" => $data->message
             ];
         }
         

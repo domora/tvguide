@@ -10,6 +10,7 @@ use Domora\TvGuide\Data\Program;
 use Domora\TvGuide\Data\Channel;
 use Domora\TvGuide\Data\Schedule;
 use Domora\TvGuide\Response\Success;
+use Domora\TvGuide\Response\Error;
 
 class ProgramController extends AbstractController
 {
@@ -25,24 +26,39 @@ class ProgramController extends AbstractController
         }
 
         if (count($channels) == 0) {
-            return $this->serializer->error('a list of channel must be provided in "channels" argument', 400);
+            throw new Error(400, 'MISSING_CHANNELS_ARGUMENT',
+                'A list of channel must be provided in "channels" argument');
+        }
+        
+        if (!$request->get('start')) {
+            throw new Error(400, 'MISSING_START_ARGUMENT',
+                'A start date must be provided in "start" argument');
+        }
+        
+        if (!$request->get('end')) {
+            throw new Error(400, 'MISSING_END_ARGUMENT',
+                'An end date must be provided in "end" argument');
         }
 
         // Extracts the time period to look for
-        $start = new \DateTime($request->get('start'));
-        $end = new \DateTime($request->get('end'));
-
-        if (!$start) {
-            return $this->serializer->error('unvalid datetime format in "start" argument', 400);
+        try {
+            $start = new \DateTime($request->get('start'));
+        } catch(\Exception $e) {
+            throw new Error(400, 'UNVALID_START_ARGUMENT',
+                'Unvalid datetime format in "start" argument');
         }
-
-        if (!$end) {
-            return $this->serializer->error('unvalid datetime format in "end" argument', 400);
+        
+        try {
+            $end = new \DateTime($request->get('end'));
+        } catch(\Exception $e) {
+            throw new Error(400, 'UNVALID_END_ARGUMENT',
+                'Unvalid datetime format in "end" argument');
         }
 
         $period = $end->getTimestamp() - $start->getTimestamp();
         if ($period < 0 || $period > 24 * 3600) {
-            return $this->serializer->error('the period between "start" and "end" must be between 0 and 24 hours', 400);
+            throw new Error(400, 'UNVALID_PERIOD',
+                'The period between "start" and "end" must be between 0 and 24 hours');
         }
 
         // Finds all the requested channels
