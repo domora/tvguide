@@ -57,6 +57,11 @@ trait ImageContentTrait
         
         $directory = sprintf('%s/%s/%s', self::$imagesDirectory, $this->getImagesDirectoryName(), $this->id);
         
+        // Create the program directory if necessary
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+        
         $image = imagecreatefromjpeg($url);
         imagepng($image, "$directory/original.png", 9);
         

@@ -37,4 +37,32 @@ class ProgramTest extends WebTestCase
         $client->request('GET', '/v1/programs/' . $program['id']);
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
+    
+    public function testCreateProgramWithImage()
+    {
+        $client = $this->createClient();
+        
+        // Create a program
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => 1415289600,
+            'stop' => 1415295600,
+            'image' => sprintf('%s/../Data/domora.jpg', dirname(__FILE__))
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+        
+        $json = json_decode($response->getContent(), true);
+        $this->assertEquals($json['code'], 200);
+        $this->assertEquals($json['status'], 'PROGRAM_CREATED');
+        
+        // Check that this program has images
+        $program = $json['data'];
+        $this->assertCount(3, $program['images']);
+        
+        // Delete the program and check images are gone
+        $client->request('DELETE', '/v1/programs/' . $program['id']);
+        $this->assertTrue($client->getResponse()->isOk());
+    }
 }
