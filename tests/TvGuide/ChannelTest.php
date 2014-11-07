@@ -48,4 +48,33 @@ class ChannelControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertTrue($response->isOk());
     }
+
+    public function testCreateProgramInWrongChannel()
+    {
+        $client = $this->createClient();
+
+        // Create a program
+        $client->request('POST', '/v1/channels/fake-id/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => 1415289600,
+            'stop' => 1415295600
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertFalse($response->isOk());
+    }
+
+    public function testCreateWrongProgramInChannel()
+    {
+        $this->markTestSkipped('todo in channelController.');
+
+        $client = $this->createClient();
+
+        // Create a wrong program
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertFalse($response->isOk());
+    }
 }
