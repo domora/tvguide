@@ -18,18 +18,18 @@ class DateTimeSerializer implements SubscribingHandlerInterface
                 'type' => 'DateTime',
                 'method' => 'serializeDateTime',
             ),
-            array(
-                'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
-                'format' => 'xml',
-                'type' => 'DateTime',
-                'method' => 'serializeDateTime',
-            ),
-            array(
-                'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
-                'format' => 'xml',
-                'type' => 'DateTime',
-                'method' => 'deserializeXmlDateTime',
-            ),
+//            array(
+//                'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
+//                'format' => 'xml',
+//                'type' => 'DateTime',
+//                'method' => 'serializeDateTime',
+//            ),
+//            array(
+//                'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
+//                'format' => 'xml',
+//                'type' => 'DateTime',
+//                'method' => 'deserializeXmlDateTime',
+//            ),
             array(
                 'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
                 'format' => 'json',
@@ -42,7 +42,7 @@ class DateTimeSerializer implements SubscribingHandlerInterface
     public function serializeDateTime($visitor, \DateTime $date, array $type, Context $context)
     {
         $groups = $context->attributes->get('groups');
-
+        
         // Returns date in the XMLTV format
         if (in_array('xmltv', $groups->getOrElse([]))) {
             return $date->format('YmdHis O');

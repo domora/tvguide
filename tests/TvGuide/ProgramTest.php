@@ -12,7 +12,7 @@ class ProgramTest extends WebTestCase
         $client = $this->createClient();
         
         // Check the programs list
-        $client->request('GET', '/v1/programs?channels=fr-ch1,fr-ch2');
+        $client->request('GET', '/v1/programs?channels=fr-ch1,fr-ch2&start=now&end=+1 hour');
         $response = $client->getResponse();
         $this->assertTrue($response->isOk());
         

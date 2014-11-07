@@ -46,7 +46,7 @@ class Serializer
         return $this->buildResponse($body, $code);
     }
     
-    public function serialize($data, array $groups = null, $code = 200)
+    public function serialize($data, array $groups = null, $code = 200, $format = self::FORMAT_JSON)
     {
         $context = SerializationContext::create()
             ->setVersion(1);
@@ -64,7 +64,7 @@ class Serializer
             ];
         }
         
-        $body = $this->serializer->serialize($data, $this->format);
+        $body = $this->serializer->serialize($data, $format);
         
         return $this->buildResponse($body, $code);
     }

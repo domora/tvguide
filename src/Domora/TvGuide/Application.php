@@ -6,6 +6,7 @@ use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
 use Igorw\Silex\ConfigServiceProvider;
@@ -60,6 +61,29 @@ class Application extends SilexApplication
         
         $this->error(function(Error $e, $code) {
             return $this['api.serializer']->serialize($e);
+        });
+        
+        $this['dispatcher']->addListener('kernel.view', function(GetResponseForControllerResultEvent $event) {
+            $request = $event->getRequest();
+            $data = $event->getControllerResult();
+            $contentType = $request->headers->get('Accept');
+            
+            if ($contentType == 'application/xml') {
+                $format = 'xml';
+            } else {
+                $format = 'json';
+            }
+            
+            if (is_array($data)) {
+                if (is_string($data[1])) {
+                    $data[1] = [$data[1]];
+                }
+                $response = $this['api.serializer']->serialize($data[0], $data[1], 200, $format);
+            } else {
+                $response = $this['api.serializer']->serialize($data, null, 200, $format);
+            }
+            
+            $event->setResponse($response);
         });
         
         $this->mount('/v1', $api);
@@ -134,19 +158,6 @@ class Application extends SilexApplication
         $this['entity.provider'] = $this->share(function() {
             return new EntityProviderFactory($this['orm.em']); 
         });
-        
-        // Custom goutte client
-        $this['scraper.client'] = function() {
-            $client = new Client();
-            
-            if (isset($this['parameters']['tvscraper']['proxy'])) {
-                $client->getClient()->getConfig()->setPath('request.options/proxy', $this['parameters']['tvscraper']['proxy']);
-            }
-            
-            $client->setHeader('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/29.0');
-            
-            return $client;
-        };
 
         $this['wikipedia'] = $this->share(function() {
             return new Wikipedia();
