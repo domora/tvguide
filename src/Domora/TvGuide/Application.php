@@ -137,9 +137,9 @@ class Application extends SilexApplication
             $builder = SerializerBuilder::create();
             $builder->setDebug($this['debug']);
             $builder->setCacheDir($this['cache.directory']);
-            $builder->configureHandlers(function(HandlerRegistry $registry) {
-                $registry->registerSubscribingHandler(new DateTimeSerializer());
-            });
+//            $builder->configureHandlers(function(HandlerRegistry $registry) {
+//                $registry->registerSubscribingHandler(new DateTimeSerializer());
+//            });
 
             return $builder->build();
         });

@@ -64,14 +64,14 @@ class Serializer
             ];
         }
         
-        $body = $this->serializer->serialize($data, $format);
+        $body = $this->serializer->serialize($data, $format, $context);
         
-        return $this->buildResponse($body, $code);
+        return $this->buildResponse($body, $code, $format);
     }
 
-    private function buildResponse($body, $status)
+    private function buildResponse($body, $status, $format)
     {
-        $headers = ["Content-Type" => $this->contentTypes[$this->format]];
+        $headers = ["Content-Type" => $this->contentTypes[$format]];
 
         return new Response($body, $status, $headers);
     }
