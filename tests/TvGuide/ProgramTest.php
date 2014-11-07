@@ -6,7 +6,21 @@ use Domora\Tests\WebTestCase;
 
 class ProgramTest extends WebTestCase
 {
-    public function testCreateAndRemoveProgram()
+
+    public function testGetVoidProgramsList()
+    {
+        $client = $this->createClient();
+        
+        // Check the programs list
+        $client->request('GET', '/v1/programs?channels=fr-ch1,fr-ch2');
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+        
+        $json = json_decode($response->getContent(), true);
+        $this->assertCount(2, $json['channels']);
+    }
+
+    public function testCreateGetRemoveProgram()
     {
         $this->markTestSkipped('Try to avoid cache issues');
         

@@ -4,8 +4,11 @@ namespace Domora\TvGuide\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\Criteria;
 
 use Domora\TvGuide\Data\Program;
+use Domora\TvGuide\Data\Channel;
+use Domora\TvGuide\Data\Schedule;
 use Domora\TvGuide\Response\Success;
 
 class ProgramController extends AbstractController
