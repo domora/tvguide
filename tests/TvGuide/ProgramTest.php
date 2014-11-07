@@ -39,6 +39,24 @@ class ProgramTest extends WebTestCase
         $client->request('GET', '/v1/programs/' . $program['id']);
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
+
+    public function testGetWrongProgram()
+    {
+        $client = $this->createClient();
+
+        $wrongProgramId = 'fake-id';
+        $client->request('GET', '/v1/programs/' . $wrongProgramId);
+        $this->assertFalse($client->getResponse()->isOk());
+    }
+
+    public function testDeleteWrongProgram()
+    {
+        $client = $this->createClient();
+
+        $wrongProgramId = 'fake-id';
+        $client->request('DELETE', '/v1/programs/' . $wrongProgramId);
+        $this->assertFalse($client->getResponse()->isOk());
+    }
     
     public function testCreateProgramWithImage()
     {
