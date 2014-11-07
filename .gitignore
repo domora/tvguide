@@ -1,5 +1,6 @@
 app/config/config.json
 vendor
 app/cache
-web/images/programs/*
+web/images/program
+web/images/channel
 web/.htaccess
