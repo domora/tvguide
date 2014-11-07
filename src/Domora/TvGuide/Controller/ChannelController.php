@@ -44,10 +44,15 @@ class ChannelController extends AbstractController
         $program->setChannel($channel);
         $channel->addProgram($program);
         $program->generateUniqueId();
+        
+        // Import image if necessary
+        $data = json_decode($request->getContent(), true);
+        if (isset($data['image'])) {
+            $program->importImageFromUrl($data['image']);
+        }
+        
         $this->em->persist($program);
-        
-        $response = new Success(200, 'PROGRAM_CREATED', $program);
-        
-        return $this->serializer->serialize($response);
+
+        return $this->serializer->serialize(new Success(200, 'PROGRAM_CREATED', $program));
     }
 }

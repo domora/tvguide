@@ -70,7 +70,9 @@ class Application extends SilexApplication
         $root = __DIR__ . "/../../..";
         $configurationVars = [
             'root' => $root,
-            'uri' => sprintf('%s://%s%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTP_HOST'], dirname($_SERVER['SCRIPT_NAME']))
+            'uri' => isset($_SERVER['REQUEST_SCHEME']) ? 
+                sprintf('%s://%s%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTP_HOST'], dirname($_SERVER['SCRIPT_NAME'])) :
+                ''
         ];
         
         // Load user global configuration
