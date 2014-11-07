@@ -11,10 +11,6 @@
         "images": {
             "baseUri": "%uri%/images",
             "directory": "%root%/web/images"
-        },
-        "uri": {
-            "programs": "http://localhost/marc/tvguide/images/programs",
-            "channels": "http://localhost/marc/tvguide/images/channels"
         }
     }
 }
