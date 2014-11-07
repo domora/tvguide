@@ -2,9 +2,18 @@
 
 namespace Domora\TvGuide\Service;
 
+use JMS\Serializer\Annotation as Serializer;
+
 trait ImageContentTrait
 {
+    /**
+     * @Serializer\Exclude()
+     */
     public static $imagesDirectory;
+    
+    /**
+     * @Serializer\Exclude()
+     */
     public static $imagesBaseUri;
     
     public function hasImages()
