@@ -4,7 +4,7 @@ namespace Domora\TvGuide\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Collections\Criteria;
+use DDesrosiers\SilexAnnotations\Annotations as Silex;
 
 use Domora\TvGuide\Data\Channel;
 use Domora\TvGuide\Data\Program;
@@ -14,6 +14,11 @@ class ChannelController extends AbstractController
 {
     const CHANNEL_ENTITY = 'Domora\TvGuide\Data\Channel';
     
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="GET", uri="channels")
+     * )
+     */
     public function getChannelsAction(Request $request)
     {
         $country = $request->get('country');
@@ -32,12 +37,25 @@ class ChannelController extends AbstractController
         return [$channels, 'details'];
     }
     
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="GET", uri="channels/{channel}"),
+     *     @Silex\Convert(variable="channel", callback="entity.provider:convertChannel")
+     * )
+     */
     public function getChannelAction(Channel $channel)
     {
         return [$channel, 'details'];
     }
     
-    // @todo handle error cases
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="POST", uri="channels/{channel}/programs"),
+     *     @Silex\Convert(variable="channel", callback="entity.provider:convertChannel")
+     * )
+     *
+     * Todo: Handle error cases
+     */
     public function postChannelProgramsAction(Request $request, Channel $channel)
     {
         $program = $this->serializer->deserialize($request->getContent(), ProgramController::PROGRAM_ENTITY, 'json');

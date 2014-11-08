@@ -5,6 +5,7 @@ namespace Domora\TvGuide\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\Criteria;
+use DDesrosiers\SilexAnnotations\Annotations as Silex;
 
 use Domora\TvGuide\Data\Program;
 use Domora\TvGuide\Data\Channel;
@@ -16,6 +17,11 @@ class ProgramController extends AbstractController
 {
     const PROGRAM_ENTITY = 'Domora\TvGuide\Data\Program';
     
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="GET", uri="programs")
+     * )
+     */
     public function getProgramsAction(Request $request)
     {
         // Extracts channels IDs from the request
@@ -93,11 +99,23 @@ class ProgramController extends AbstractController
         return [$schedule, $mode];
     }
     
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="GET", uri="programs/{program}"),
+     *     @Silex\Convert(variable="program", callback="entity.provider:convertProgram")
+     * )
+     */
     public function getProgramAction(Program $program)
     {
         return [$program, 'details'];
     }
     
+    /**
+     * @Silex\Route(
+     *     @Silex\Request(method="DELETE", uri="programs/{program}"),
+     *     @Silex\Convert(variable="program", callback="entity.provider:convertProgram")
+     * )
+     */
     public function deleteProgramAction(Program $program)
     {
         $this->em->remove($program);

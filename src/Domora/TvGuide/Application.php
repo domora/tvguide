@@ -10,14 +10,15 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
 use Igorw\Silex\ConfigServiceProvider;
+use DDesrosiers\SilexAnnotations\AnnotationServiceProvider;
+use Doctrine\Common\Cache\FilesystemCache;
 use Goutte\Client;
 
 use Domora\Silex\Provider\DoctrineORMServiceProvider;
 use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\Wikipedia;
-use Domora\TvGuide\Service\DateTimeSerializer;
-use Domora\TvGuide\Service\EntityProviderFactory;
+use Domora\TvGuide\Service\EntityProvider;
 
 use Domora\TvGuide\Service\ImageContentTrait;
 use Domora\TvGuide\Response\Error;
@@ -33,32 +34,14 @@ class Application extends SilexApplication
         
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
-        $this['image.directory'] = __DIR__.'/../../../web/images/programs';
 
+        $this->registerControllers();
         $this->registerServiceProviders();
         $this->registerInternalServices();
-        $this->registerControllers();
     }
     
     public function loadRoutes()
     {
-        $channelProvider = $this['entity.provider']->getProvider(ChannelController::CHANNEL_ENTITY);
-        $programProvider = $this['entity.provider']->getProvider(ProgramController::PROGRAM_ENTITY);
-        $serviceProvider = $this['entity.provider']->getProvider(ServiceController::SERVICE_ENTITY);
-
-        $api = $this['controllers_factory'];
-
-        $api->get('/channels', 'controller.channel:getChannelsAction');
-        $api->get('/channels/{channel}', 'controller.channel:getChannelAction')->convert('channel', $channelProvider);
-        $api->post('/channels/{channel}/programs', 'controller.channel:postChannelProgramsAction')->convert('channel', $channelProvider);
-
-        $api->get('/programs', 'controller.program:getProgramsAction');
-        $api->get('/programs/{program}', 'controller.program:getProgramAction')->convert('program', $programProvider);
-        $api->delete('/programs/{program}', 'controller.program:deleteProgramAction')->convert('program', $programProvider);
-        
-        $api->get('/services', 'controller.service:getServicesAction');
-        $api->get('/services/{service}', 'controller.service:getServiceAction')->convert('service', $serviceProvider);
-        
         $this->error(function(Error $e, $code) {
             return $this['api.serializer']->serialize($e);
         });
@@ -85,8 +68,6 @@ class Application extends SilexApplication
             
             $event->setResponse($response);
         });
-        
-        $this->mount('/v1', $api);
     }
 
     private function registerServiceProviders()
@@ -132,6 +113,11 @@ class Application extends SilexApplication
                 ),
             ),
         ]);
+        
+        $this->register(new AnnotationServiceProvider(), [
+            "annot.cache" => new FilesystemCache($this['cache.directory'] . '/silex-annotation'),
+            "annot.controllers" => $this['tvguide.controllers']
+        ]);
 
         $this['serializer'] = $this->share(function() {
             $builder = SerializerBuilder::create();
@@ -153,9 +139,9 @@ class Application extends SilexApplication
         });
         
         $this['entity.provider'] = $this->share(function() {
-            return new EntityProviderFactory($this['orm.em']); 
+            return new EntityProvider($this['orm.em']); 
         });
-
+        
         $this['wikipedia'] = $this->share(function() {
             return new Wikipedia();
         });
@@ -163,16 +149,12 @@ class Application extends SilexApplication
     
     private function registerControllers()
     {
-        $this['controller.channel'] = $this->share(function() {
-            return new Controller\ChannelController($this['orm.em'], $this['api.serializer']); 
-        });
-        
-        $this['controller.program'] = $this->share(function() {
-            return new Controller\ProgramController($this['orm.em'], $this['api.serializer']); 
-        });
-        
-        $this['controller.service'] = $this->share(function() {
-            return new Controller\ServiceController($this['orm.em'], $this['api.serializer']); 
-        });
+        $this['tvguide.controllers'] = [
+            "v1" => [
+                "Domora\TvGuide\Controller\ChannelController",
+                "Domora\TvGuide\Controller\ProgramController",
+                "Domora\TvGuide\Controller\ServiceController"
+            ]
+        ];        
     }
 }

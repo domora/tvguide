@@ -1,11 +1,62 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
-        "This file is @generated automatically"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c7933b39db65982a28c2d30e8a613836",
+    "hash": "591791af73fd54dd2b515d8ee39e7f09",
     "packages": [
+        {
+            "name": "ddesrosiers/silex-annotation-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/danadesrosiers/silex-annotation-provider.git",
+                "reference": "79c6a9d01ab7fde67de081f237f0279f0243e4d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/danadesrosiers/silex-annotation-provider/zipball/79c6a9d01ab7fde67de081f237f0279f0243e4d6",
+                "reference": "79c6a9d01ab7fde67de081f237f0279f0243e4d6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/annotations": "~1.0",
+                "doctrine/cache": "~1.0",
+                "silex/silex": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7.0",
+                "symfony/browser-kit": "~2.3.0",
+                "symfony/security": "~2.3"
+            },
+            "suggest": {
+                "symfony/security": "You will need this package to use the `Secure` annotation"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DDesrosiers\\SilexAnnotations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dana Desrosiers",
+                    "email": "dana.desrosiers@gmail.com"
+                }
+            ],
+            "description": "A silex service provider that allows the use of annotations in ServiceControllers.",
+            "keywords": [
+                "annotation",
+                "provider",
+                "service",
+                "silex"
+            ],
+            "time": "2014-10-27 04:32:01"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.1",
@@ -349,12 +400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "6458b0bd6e62817e961a9611959a67b5f8622b59"
+                "reference": "a2e87c57a9843f07e8e6d6e57fe0fff965c0f4ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/6458b0bd6e62817e961a9611959a67b5f8622b59",
-                "reference": "6458b0bd6e62817e961a9611959a67b5f8622b59",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a2e87c57a9843f07e8e6d6e57fe0fff965c0f4ac",
+                "reference": "a2e87c57a9843f07e8e6d6e57fe0fff965c0f4ac",
                 "shasum": ""
             },
             "require": {
@@ -412,7 +463,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2014-11-05 14:17:28"
+            "time": "2014-11-08 06:30:07"
         },
         {
             "name": "doctrine/inflector",
@@ -2005,17 +2056,25 @@
             "time": "2014-10-24 05:49:22"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "doctrine/dbal": 20,
         "doctrine/orm": 20,
         "doctrine/data-fixtures": 20,
         "jms/serializer": 20,
-        "igorw/config-service-provider": 20
+        "igorw/config-service-provider": 20,
+        "ddesrosiers/silex-annotation-provider": 20
     },
-    "prefer-stable": false,
-    "platform": [],
-    "platform-dev": []
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
