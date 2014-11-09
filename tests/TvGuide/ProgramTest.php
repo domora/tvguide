@@ -174,4 +174,30 @@ class ProgramTest extends WebTestCase
         $this->assertCount(1, $program['credits']['actors']);
         $this->assertEquals('Pierre de Beaucorps', $program['credits']['actors'][0]['name']);
     }
+    
+    public function testCreateProgramWithExistingActor()
+    {
+        $client = $this->createClient();
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => date('c', time() - 3600),
+            'stop' => date('c'),
+            'credits' => [
+                'actors' => [
+                    ['name' => 'Person 0']
+                ]
+            ]
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+        
+        $json = json_decode($response->getContent(), true);
+        $program = $json['data'];
+        
+        $this->assertCount(1, $program['credits']);
+        $this->assertCount(1, $program['credits']['actors']);
+        $this->assertEquals('Person 0', $program['credits']['actors'][0]['name']);
+        $this->assertNotEmpty($program['credits']['actors'][0]['description']);
+    }
 }

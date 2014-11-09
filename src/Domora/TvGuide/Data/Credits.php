@@ -14,7 +14,7 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_directors")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $directors;
@@ -22,7 +22,7 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_writers")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $writers;
@@ -30,7 +30,8 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_actors")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Expose()
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $actors;
@@ -38,7 +39,7 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_presenters")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $presenters;
@@ -46,7 +47,7 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_composers")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $composers;
@@ -54,7 +55,7 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_guests")
-     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
+     * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $guests;
@@ -72,11 +73,11 @@ class Credits
     /**
      * Add presenters
      *
-     * @param \Domora\TvGuide\Data\Person $presenters
+     * @param Person $presenters
      *
      * @return Program
      */
-    public function addPresenter(\Domora\TvGuide\Data\Person $presenters)
+    public function addPresenter(Person $presenters)
     {
         $this->presenters[] = $presenters;
 
@@ -86,9 +87,9 @@ class Credits
     /**
      * Remove presenters
      *
-     * @param \Domora\TvGuide\Data\Person $presenters
+     * @param Person $presenters
      */
-    public function removePresenter(\Domora\TvGuide\Data\Person $presenters)
+    public function removePresenter(Person $presenters)
     {
         $this->presenters->removeElement($presenters);
     }
@@ -102,15 +103,27 @@ class Credits
     {
         return $this->presenters;
     }
+    
+    /**
+     * Replace presenters
+     *
+     * @param Closure $c
+     */
+    public function replacePresenters(\Closure $c)
+    {
+        if ($this->presenters) {
+            $this->presenters = $this->presenters->map($c);
+        }
+    }
 
     /**
      * Add directors
      *
-     * @param \Domora\TvGuide\Data\Person $directors
+     * @param Person $directors
      *
      * @return Program
      */
-    public function addDirector(\Domora\TvGuide\Data\Person $directors)
+    public function addDirector(Person $directors)
     {
         $this->directors[] = $directors;
 
@@ -120,9 +133,9 @@ class Credits
     /**
      * Remove directors
      *
-     * @param \Domora\TvGuide\Data\Person $directors
+     * @param Person $directors
      */
-    public function removeDirector(\Domora\TvGuide\Data\Person $directors)
+    public function removeDirector(Person $directors)
     {
         $this->directors->removeElement($directors);
     }
@@ -136,15 +149,27 @@ class Credits
     {
         return $this->directors;
     }
+    
+    /**
+     * Replace directors
+     *
+     * @param Closure $c
+     */
+    public function replaceDirectors(\Closure $c)
+    {
+        if ($this->directors) {
+            $this->directors = $this->directors->map($c);
+        }
+    }
 
     /**
      * Add writers
      *
-     * @param \Domora\TvGuide\Data\Person $writers
+     * @param Person $writers
      *
      * @return Program
      */
-    public function addWriter(\Domora\TvGuide\Data\Person $writers)
+    public function addWriter(Person $writers)
     {
         $this->writers[] = $writers;
 
@@ -154,9 +179,9 @@ class Credits
     /**
      * Remove writers
      *
-     * @param \Domora\TvGuide\Data\Person $writers
+     * @param Person $writers
      */
-    public function removeWriter(\Domora\TvGuide\Data\Person $writers)
+    public function removeWriter(Person $writers)
     {
         $this->writers->removeElement($writers);
     }
@@ -170,15 +195,27 @@ class Credits
     {
         return $this->writers;
     }
+    
+    /**
+     * Replace writers
+     *
+     * @param Closure $c
+     */
+    public function replaceWriters(\Closure $c)
+    {
+        if ($this->writers) {
+            $this->writers = $this->writers->map($c);
+        }
+    }
 
     /**
      * Add actors
      *
-     * @param \Domora\TvGuide\Data\Person $actors
+     * @param Person $actors
      *
      * @return Program
      */
-    public function addActor(\Domora\TvGuide\Data\Person $actors)
+    public function addActor(Person $actors)
     {
         $this->actors[] = $actors;
 
@@ -188,9 +225,9 @@ class Credits
     /**
      * Remove actors
      *
-     * @param \Domora\TvGuide\Data\Person $actors
+     * @param Person $actors
      */
-    public function removeActor(\Domora\TvGuide\Data\Person $actors)
+    public function removeActor(Person $actors)
     {
         $this->actors->removeElement($actors);
     }
@@ -204,15 +241,27 @@ class Credits
     {
         return $this->actors;
     }
+    
+    /**
+     * Replace actors
+     *
+     * @param Closure $c
+     */
+    public function replaceActors(\Closure $c)
+    {
+        if ($this->actors) {
+            $this->actors = $this->actors->map($c);
+        }
+    }
 
     /**
      * Add composers
      *
-     * @param \Domora\TvGuide\Data\Person $composers
+     * @param Person $composers
      *
      * @return Program
      */
-    public function addComposer(\Domora\TvGuide\Data\Person $composers)
+    public function addComposer(Person $composers)
     {
         $this->composers[] = $composers;
 
@@ -222,9 +271,9 @@ class Credits
     /**
      * Remove composers
      *
-     * @param \Domora\TvGuide\Data\Person $composers
+     * @param Person $composers
      */
-    public function removeComposer(\Domora\TvGuide\Data\Person $composers)
+    public function removeComposer(Person $composers)
     {
         $this->composers->removeElement($composers);
     }
@@ -238,15 +287,27 @@ class Credits
     {
         return $this->composers;
     }
+    
+    /**
+     * Replace composers
+     *
+     * @param Closure $c
+     */
+    public function replaceComposers(\Closure $c)
+    {
+        if ($this->composers) {
+            $this->composers = $this->composers->map($c);
+        }
+    }
 
     /**
      * Add guests
      *
-     * @param \Domora\TvGuide\Data\Person $guests
+     * @param Person $guests
      *
      * @return Program
      */
-    public function addGuest(\Domora\TvGuide\Data\Person $guests)
+    public function addGuest(Person $guests)
     {
         $this->guests[] = $guests;
 
@@ -256,9 +317,9 @@ class Credits
     /**
      * Remove guests
      *
-     * @param \Domora\TvGuide\Data\Person $guests
+     * @param Person $guests
      */
-    public function removeGuest(\Domora\TvGuide\Data\Person $guests)
+    public function removeGuest(Person $guests)
     {
         $this->guests->removeElement($guests);
     }
@@ -271,5 +332,17 @@ class Credits
     public function getGuests()
     {
         return $this->guests;
+    }
+    
+    /**
+     * Replace guests
+     *
+     * @param Closure $c
+     */
+    public function replaceGuests(\Closure $c)
+    {
+        if ($this->guests) {
+            $this->guests = $this->guests->map($c);
+        }
     }
 }

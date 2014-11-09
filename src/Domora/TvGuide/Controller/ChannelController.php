@@ -63,6 +63,25 @@ class ChannelController extends AbstractController
         $channel->addProgram($program);
         $program->generateUniqueId();
         
+        $eliminateDuplicates = function($person) {
+            $found = $this->em
+                ->getRepository('Domora\TvGuide\Data\Person')
+                ->findOneByName($person->getName());
+            
+            return $found ?: $person;
+        };
+        
+        // Eliminate credits duplicates
+        $credits = $program->getCredits();
+        if ($credits) {
+            $credits->replacePresenters($eliminateDuplicates);
+            $credits->replaceDirectors($eliminateDuplicates);
+            $credits->replaceWriters($eliminateDuplicates);
+            $credits->replaceActors($eliminateDuplicates);
+            $credits->replaceComposers($eliminateDuplicates);
+            $credits->replaceGuests($eliminateDuplicates);
+        }
+
         // Import image if necessary
         $data = json_decode($request->getContent(), true);
         if (isset($data['image'])) {
@@ -70,6 +89,7 @@ class ChannelController extends AbstractController
         }
         
         $this->em->persist($program);
+        $this->em->flush();
 
         return new Success(200, 'PROGRAM_CREATED', $program);
     }

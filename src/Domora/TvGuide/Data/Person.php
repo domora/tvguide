@@ -15,12 +15,14 @@ class Person
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
+     * @Serializer\ReadOnly()
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer", name="wikipedia_id", nullable=true)
-     * @Serializer\Exclude()
+     * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
+     * @Serializer\Type("integer")
      */
     private $wikipediaId;
 
@@ -34,7 +36,7 @@ class Person
     /**
      * @ORM\Column(type="array", nullable=true)
      * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
-     * @Serializer\Type("string")
+     * @Serializer\Type("array<string>")
      */
     protected $description;
 
