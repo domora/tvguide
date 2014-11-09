@@ -94,9 +94,84 @@ class ProgramTest extends WebTestCase
         // Check that this program has images
         $program = $json['data'];
         $this->assertCount(3, $program['images']);
+    }
+    
+    public function testCreateProgramInChannel()
+    {
+        $client = $this->createClient();
+
+        // Create a program
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
+        ]));
         
-        // Delete the program and check images are gone
-        $client->request('DELETE', '/v1/programs/' . $program['id']);
-        $this->assertTrue($client->getResponse()->isOk());
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testCreateProgramInWrongChannel()
+    {
+        $client = $this->createClient();
+
+        // Create a program
+        $client->request('POST', '/v1/channels/fake-id/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertFalse($response->isOk());
+    }
+
+    public function testCreateWrongProgramInChannel()
+    {
+        $this->markTestSkipped('todo : handle errors in channelController.');
+
+        $client = $this->createClient();
+
+        // Fail to create wrong programs
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+        ]));
+        $this->assertFalse($client->getResponse()->isOk());
+
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'stop' => date('c')
+        ]));
+        $this->assertFalse($client->getResponse()->isOk());
+
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => date('c')
+        ]));
+        $this->assertFalse($client->getResponse()->isOk());
+    }
+    
+    public function testCreateProgramWithCredits()
+    {
+        $client = $this->createClient();
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
+            'title' => 'Test Program',
+            'start' => date('c', time() - 3600),
+            'stop' => date('c'),
+            'credits' => [
+                'actors' => [
+                    ['name' => 'Pierre de Beaucorps']
+                ]
+            ]
+        ]));
+        
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+        
+        $json = json_decode($response->getContent(), true);
+        $program = $json['data'];
+        
+        $this->assertCount(1, $program['credits']);
+        $this->assertCount(1, $program['credits']['actors']);
+        $this->assertEquals('Pierre de Beaucorps', $program['credits']['actors'][0]['name']);
     }
 }

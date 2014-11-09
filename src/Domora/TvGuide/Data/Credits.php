@@ -3,6 +3,7 @@
 namespace Domora\TvGuide\Data;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -11,25 +12,25 @@ use JMS\Serializer\Annotation as Serializer;
 class Credits
 {
     /**
-     * @ORM\Column(type="array", nullable=true)
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="director")
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_directors")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $directors;
     
     /**
-     * @ORM\Column(type="array", nullable=true)
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="writer")
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_writers")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $writers;
     
     /**
-     * @ORM\Column(type="array", nullable=true)
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="actor")
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_actors")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $actors;
@@ -37,60 +38,238 @@ class Credits
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_presenters")
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="presenter")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $presenters;
     
     /**
-     * @ORM\Column(type="array", nullable=true)
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="composer")
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_composers")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $composers;
     
     /**
-     * @ORM\Column(type="array", nullable=true)
-     * @Serializer\Type("array<string>")
-     * @Serializer\XmlList(inline=true, entry="guest")
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="program_guests")
+     * @Serializer\Type("array<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
      */
     protected $guests;
 
     public function __construct()
     {
-        $this->presenters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->directors = new ArrayCollection();
+        $this->writers = new ArrayCollection();
+        $this->actors = new ArrayCollection();
+        $this->presenters = new ArrayCollection();
+        $this->composers = new ArrayCollection();
+        $this->guests = new ArrayCollection();
     }
     
-    public function addDirector($director)
+    /**
+     * Add presenters
+     *
+     * @param \Domora\TvGuide\Data\Person $presenters
+     *
+     * @return Program
+     */
+    public function addPresenter(\Domora\TvGuide\Data\Person $presenters)
     {
-        $this->directors[] = $director;
+        $this->presenters[] = $presenters;
+
+        return $this;
     }
-    
-    public function addWriter($writer)
+
+    /**
+     * Remove presenters
+     *
+     * @param \Domora\TvGuide\Data\Person $presenters
+     */
+    public function removePresenter(\Domora\TvGuide\Data\Person $presenters)
     {
-        $this->writers[] = $writer;
+        $this->presenters->removeElement($presenters);
     }
-    
-    public function addActor($name, $role = null)
+
+    /**
+     * Get presenters
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPresenters()
     {
-        $this->actors[] = $name;
+        return $this->presenters;
     }
-    
-    public function addPresenter($presenter)
+
+    /**
+     * Add directors
+     *
+     * @param \Domora\TvGuide\Data\Person $directors
+     *
+     * @return Program
+     */
+    public function addDirector(\Domora\TvGuide\Data\Person $directors)
     {
-        $this->presenters[] = $presenter;
+        $this->directors[] = $directors;
+
+        return $this;
     }
-    
-    public function addComposer($composer)
+
+    /**
+     * Remove directors
+     *
+     * @param \Domora\TvGuide\Data\Person $directors
+     */
+    public function removeDirector(\Domora\TvGuide\Data\Person $directors)
     {
-        $this->composers[] = $composer;
+        $this->directors->removeElement($directors);
     }
-    
-    public function addGuest($guest)
+
+    /**
+     * Get directors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDirectors()
     {
-        $this->guests[] = $guest;
+        return $this->directors;
+    }
+
+    /**
+     * Add writers
+     *
+     * @param \Domora\TvGuide\Data\Person $writers
+     *
+     * @return Program
+     */
+    public function addWriter(\Domora\TvGuide\Data\Person $writers)
+    {
+        $this->writers[] = $writers;
+
+        return $this;
+    }
+
+    /**
+     * Remove writers
+     *
+     * @param \Domora\TvGuide\Data\Person $writers
+     */
+    public function removeWriter(\Domora\TvGuide\Data\Person $writers)
+    {
+        $this->writers->removeElement($writers);
+    }
+
+    /**
+     * Get writers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWriters()
+    {
+        return $this->writers;
+    }
+
+    /**
+     * Add actors
+     *
+     * @param \Domora\TvGuide\Data\Person $actors
+     *
+     * @return Program
+     */
+    public function addActor(\Domora\TvGuide\Data\Person $actors)
+    {
+        $this->actors[] = $actors;
+
+        return $this;
+    }
+
+    /**
+     * Remove actors
+     *
+     * @param \Domora\TvGuide\Data\Person $actors
+     */
+    public function removeActor(\Domora\TvGuide\Data\Person $actors)
+    {
+        $this->actors->removeElement($actors);
+    }
+
+    /**
+     * Get actors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActors()
+    {
+        return $this->actors;
+    }
+
+    /**
+     * Add composers
+     *
+     * @param \Domora\TvGuide\Data\Person $composers
+     *
+     * @return Program
+     */
+    public function addComposer(\Domora\TvGuide\Data\Person $composers)
+    {
+        $this->composers[] = $composers;
+
+        return $this;
+    }
+
+    /**
+     * Remove composers
+     *
+     * @param \Domora\TvGuide\Data\Person $composers
+     */
+    public function removeComposer(\Domora\TvGuide\Data\Person $composers)
+    {
+        $this->composers->removeElement($composers);
+    }
+
+    /**
+     * Get composers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComposers()
+    {
+        return $this->composers;
+    }
+
+    /**
+     * Add guests
+     *
+     * @param \Domora\TvGuide\Data\Person $guests
+     *
+     * @return Program
+     */
+    public function addGuest(\Domora\TvGuide\Data\Person $guests)
+    {
+        $this->guests[] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Remove guests
+     *
+     * @param \Domora\TvGuide\Data\Person $guests
+     */
+    public function removeGuest(\Domora\TvGuide\Data\Person $guests)
+    {
+        $this->guests->removeElement($guests);
+    }
+
+    /**
+     * Get guests
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGuests()
+    {
+        return $this->guests;
     }
 }

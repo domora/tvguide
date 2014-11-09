@@ -27,12 +27,14 @@ class Person
     /**
      * @ORM\Column(type="string")
      * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
+     * @Serializer\Type("string")
      */
     private $name;
 
     /**
      * @ORM\Column(type="array", nullable=true)
      * @Serializer\Groups({"schedule", "xmltv", "details", "service"})
+     * @Serializer\Type("string")
      */
     protected $description;
 

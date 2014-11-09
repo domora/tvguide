@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Domora\TvGuide\Data\Channel;
 use Domora\TvGuide\Data\Program;
 use Domora\TvGuide\Data\Person;
+use Domora\TvGuide\Data\Credits;
 
 class DataFixtures extends AbstractFixture
 {
@@ -88,13 +89,16 @@ class DataFixtures extends AbstractFixture
             $program->setStop(clone $date);
             $date->modify('+3 minutes');
             
+            $credits = new Credits();
             $persons = array_rand($this->persons, rand(2, 5));
 
             foreach ($persons as $index) {
-                $program->addActor($this->persons[$index]);
+                $credits->addActor($this->persons[$index]);
             }
             
+            $program->setCredits($credits);
             $channel->addProgram($program);
+            
             $this->manager->persist($program);
         }
     }

@@ -30,32 +30,45 @@ class DateTimeSerializer implements SubscribingHandlerInterface
                 'type' => 'DateTime',
                 'method' => 'deserializeXmlDateTime',
             ),
+            array(
+                'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
+                'format' => 'json',
+                'type' => 'DateTime',
+                'method' => 'deserializeJsonDateTime',
+            ),
         );
     }
 
     public function serializeDateTime($visitor, \DateTime $date, array $type, Context $context)
     {
         $groups = $context->attributes->get('groups');
-        $isXmlTv = in_array('xmltv', $groups->get());
+        $isXmlTv = in_array('xmltv', $groups->getOrElse([]));
 
         // Returns date in the XMLTV format
         if ($isXmlTv) {
             return $date->format('YmdHis O');
         }
 
-        // Returns date in the given format
-        if (!empty($type['params'])) {
-            return $date->format($type['params'][0]);
-        }
-        
-        // Returns date in the UNIX format
-        return (int) $date->getTimestamp();
+        return $date->format(\DateTime::ISO8601);
+    }
+    
+    public function deserializeJsonDateTime($visitor, $value, array $params, Context $context)
+    {
+//        $groups = $context->attributes->get('groups');
+//        $isXmlTv = in_array('xmltv', $groups->get());
+//
+//        // Returns date in the XMLTV format
+//        if ($isXmlTv) {
+//            return $date->format('YmdHis O');
+//        }
+
+        return new \DateTime($value);
     }
     
     public function deserializeXmlDateTime($visitor, \SimpleXMLElement $xml, array $params, Context $context)
     {
         $groups = $context->attributes->get('groups');
-        $isXmlTv = in_array('xmltv', $groups->get());
+        $isXmlTv = in_array('xmltv', $groups->getOrElse([]));
         $value = (string) $xml;
         
         return new \DateTime($value);
