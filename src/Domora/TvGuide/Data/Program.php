@@ -82,7 +82,7 @@ class Program
     protected $description;
     
     /**
-     * @ORM\Embedded(class="Domora\TvGuide\Data\Credits")
+     * @ORM\OneToOne(targetEntity="Credits", cascade={"persist"})
      * @Serializer\Type("Domora\TvGuide\Data\Credits")
      * @Serializer\Groups({"xmltv", "details"})
      */

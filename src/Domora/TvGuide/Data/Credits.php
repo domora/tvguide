@@ -7,10 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @ORM\Embeddable
+ * @ORM\Entity
+ * @ORM\Table(name="credits")
  */
 class Credits
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     * @Serializer\Exclude()
+     */
+    protected $id;
+    
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="program_directors")
@@ -68,6 +77,11 @@ class Credits
         $this->presenters = new ArrayCollection();
         $this->composers = new ArrayCollection();
         $this->guests = new ArrayCollection();
+    }
+    
+    public function getId()
+    {
+        return $this->id;
     }
     
     /**
