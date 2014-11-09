@@ -19,6 +19,7 @@ use Domora\TvGuide\Service\Serializer;
 use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\Wikipedia;
 use Domora\TvGuide\Service\EntityProvider;
+use Domora\TvGuide\Service\DateTimeSerializer;
 
 use Domora\TvGuide\Service\ImageContentTrait;
 use Domora\TvGuide\Response\Error;
@@ -123,7 +124,10 @@ class Application extends SilexApplication
             $builder = SerializerBuilder::create();
             $builder->setDebug($this['debug']);
             $builder->setCacheDir($this['cache.directory']);
-
+            $builder->configureHandlers(function(HandlerRegistry $registry) {
+                $registry->registerSubscribingHandler(new DateTimeSerializer());
+            });
+            
             return $builder->build();
         });
     }
