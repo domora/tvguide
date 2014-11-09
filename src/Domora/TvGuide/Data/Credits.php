@@ -21,7 +21,7 @@ class Credits
     protected $id;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_directors")
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
@@ -29,7 +29,7 @@ class Credits
     protected $directors;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_writers")
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
@@ -37,7 +37,7 @@ class Credits
     protected $writers;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_actors")
      * @Serializer\Expose()
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
@@ -46,7 +46,7 @@ class Credits
     protected $actors;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_presenters")
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
@@ -54,7 +54,7 @@ class Credits
     protected $presenters;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_composers")
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})
@@ -62,7 +62,7 @@ class Credits
     protected $composers;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="program_guests")
      * @Serializer\Type("ArrayCollection<Domora\TvGuide\Data\Person>")
      * @Serializer\Groups({"xmltv", "details"})

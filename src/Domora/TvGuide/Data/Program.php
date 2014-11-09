@@ -82,7 +82,7 @@ class Program
     protected $description;
     
     /**
-     * @ORM\OneToOne(targetEntity="Credits", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Credits", cascade={"persist", "remove"})
      * @Serializer\Type("Domora\TvGuide\Data\Credits")
      * @Serializer\Groups({"xmltv", "details"})
      */
