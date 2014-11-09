@@ -105,7 +105,8 @@ class ProgramTest extends WebTestCase
             'title' => 'Test Program',
             'start' => date('c', time() - 3600),
             'stop' => date('c'),
-            'episode' => ['season' => 1, 'episode' => 42]
+            'episode' => ['season' => 1, 'episode' => 42],
+            'desc' => 'Test'
         ]));
         
         $response = $client->getResponse();
@@ -114,6 +115,7 @@ class ProgramTest extends WebTestCase
         $json = json_decode($response->getContent(), true);
         $this->assertEquals(1, $json['data']['season']);
         $this->assertEquals(42, $json['data']['episode']);
+        $this->assertEquals('Test', $json['data']['desc']);
     }
 
     public function testCreateProgramInWrongChannel()
@@ -188,8 +190,8 @@ class ProgramTest extends WebTestCase
             'start' => date('c', time() - 3600),
             'stop' => date('c'),
             'credits' => [
-                'actors' => [['name' => 'Person 0']],
-                'presenters' => []
+                'actors' => [['name' => 'Person 0'], ['name' => 'Person 1'], ['name' => 'Unknown Person']],
+                'writers' => []
             ]
         ]));
         
@@ -200,8 +202,12 @@ class ProgramTest extends WebTestCase
         $program = $json['data'];
         
         $this->assertCount(2, $program['credits']);
-        $this->assertCount(1, $program['credits']['actors']);
+        $this->assertCount(3, $program['credits']['actors']);
         $this->assertEquals('Person 0', $program['credits']['actors'][0]['name']);
+        $this->assertEquals('Person 1', $program['credits']['actors'][1]['name']);
+        $this->assertEquals('Unknown Person', $program['credits']['actors'][2]['name']);
         $this->assertNotEmpty($program['credits']['actors'][0]['description']);
+        $this->assertNotEmpty($program['credits']['actors'][1]['description']);
+        $this->assertNotContains('description', $program['credits']['actors'][2]);
     }
 }
