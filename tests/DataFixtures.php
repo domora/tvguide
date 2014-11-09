@@ -3,18 +3,21 @@
 namespace Domora\Tests;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 
 use Domora\TvGuide\Data\Channel;
 use Domora\TvGuide\Data\Program;
+use Domora\TvGuide\Data\Person;
 
-class DataFixtures implements FixtureInterface
+class DataFixtures extends AbstractFixture
 {
     protected $manager;
+    protected $persons = [];
     
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
+        $this->generatePersons();
         $this->generateChannels();
         $manager->flush();
     }
@@ -85,8 +88,26 @@ class DataFixtures implements FixtureInterface
             $program->setStop(clone $date);
             $date->modify('+3 minutes');
             
+            $persons = array_rand($this->persons, rand(2, 5));
+
+            foreach ($persons as $index) {
+                $program->addActor($this->persons[$index]);
+            }
+            
             $channel->addProgram($program);
             $this->manager->persist($program);
+        }
+    }
+    
+    protected function generatePersons()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            $person = new Person();
+            $person->setWikipediaId(0);
+            $person->setName("Person $i");
+            $person->setDescription("Summum a vobis bonum voluptas dicitur.", "fr");
+            $this->persons[] = $person;
+            $this->manager->persist($person);
         }
     }
 }
