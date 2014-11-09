@@ -18,9 +18,10 @@ class Serializer
         'xml' => 'application/xml'
     ];
     
-    public function __construct($serializer)
+    public function __construct($serializer, $debug)
     {
         $this->serializer = $serializer;
+        $this->debug = $debug;
         $this->format = self::FORMAT_JSON;
     }
     
@@ -62,6 +63,17 @@ class Serializer
                 "code" => $data->httpCode,
                 "message" => $data->message
             ];
+        } elseif ($data instanceof \Exception) {
+            $code = 500;
+            $exception = $data->getMessage();
+            $data = [
+                "status" => 'UNKNOWN_ERROR',
+                "code" => 500
+            ];
+            
+            if ($this->debug) {
+                $data['exception'] = $exception;
+            }
         }
         
         $body = $this->serializer->serialize($data, $format, $context);

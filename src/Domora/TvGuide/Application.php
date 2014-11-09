@@ -5,6 +5,7 @@ namespace Domora\TvGuide;
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use JMS\Serializer\SerializerBuilder;
@@ -33,6 +34,9 @@ class Application extends SilexApplication
     {
         parent::__construct();
         
+        // Convert errors to exceptions
+        ErrorHandler::register();
+        
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
 
@@ -43,7 +47,7 @@ class Application extends SilexApplication
     
     public function loadRoutes()
     {
-        $this->error(function(Error $e, $code) {
+        $this->error(function(\Exception $e, $code) {
             return $this['api.serializer']->serialize($e);
         });
         
@@ -139,7 +143,7 @@ class Application extends SilexApplication
             
         // Custom serializer relying on JMS Serializer
         $this['api.serializer'] = $this->share(function() {
-            return new Serializer($this['serializer']);
+            return new Serializer($this['serializer'], $this['debug']);
         });
         
         $this['entity.provider'] = $this->share(function() {
