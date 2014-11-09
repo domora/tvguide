@@ -5,7 +5,9 @@ namespace Domora\TvGuide;
 use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\MonologServiceProvider;
 use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use JMS\Serializer\SerializerBuilder;
@@ -36,6 +38,7 @@ class Application extends SilexApplication
         
         // Convert errors to exceptions
         ErrorHandler::register();
+        ExceptionHandler::register();
         
         $this['cache.directory'] = __DIR__.'/../../../app/cache';
         $this['vendor.directory'] = __DIR__.'/../../../vendor';
@@ -48,6 +51,10 @@ class Application extends SilexApplication
     public function loadRoutes()
     {
         $this->error(function(\Exception $e, $code) {
+            if (!$e instanceof Error) {
+                $this['monolog']->addError($e->getMessage());
+            }
+            
             return $this['api.serializer']->serialize($e);
         });
         
@@ -118,6 +125,10 @@ class Application extends SilexApplication
                 ),
             ),
         ]);
+        
+        $this->register(new MonologServiceProvider(), array(
+            'monolog.logfile' => "$root/app/logs/tvguide.log",
+        ));
         
         $this->register(new AnnotationServiceProvider(), [
             "annot.cache" => new FilesystemCache($this['cache.directory'] . '/silex-annotation'),

@@ -4,13 +4,16 @@
         "doctrine/dbal": "2.5.*@dev",
         "doctrine/orm": "dev-master",
         "symfony/console": "2.3.*",
-        "symfony/browser-kit": "2.3.*",
-        "symfony/css-selector": "2.3.*",
-        "doctrine/data-fixtures": "1.0.*@dev",
+        "monolog/monolog": ">=1.0.0",
         "fabpot/goutte": "1.0.*", 
         "jms/serializer": "0.15.*@dev",
         "igorw/config-service-provider": "1.2.*@dev",
         "ddesrosiers/silex-annotation-provider": "dev-master"
+    },
+    "require-dev": {
+        "symfony/browser-kit": "2.3.*",
+        "symfony/css-selector": "2.3.*",
+        "doctrine/data-fixtures": "1.0.*@dev"
     },
     "autoload": {
         "psr-4": {
