@@ -6,6 +6,7 @@ use Silex\Application as SilexApplication;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ use Domora\TvGuide\Data\DataManager;
 use Domora\TvGuide\Service\Wikipedia;
 use Domora\TvGuide\Service\EntityProvider;
 use Domora\TvGuide\Service\DateTimeSerializer;
+use Domora\TvGuide\Service\SecurityRequestMatcher;
 
 use Domora\TvGuide\Service\ImageContentTrait;
 use Domora\TvGuide\Response\Error;
@@ -93,10 +95,10 @@ class Application extends SilexApplication
         ];
         
         // Load user global configuration
+        $env = getenv('APP_ENV') ?: 'dev';
         $this->register(new ConfigServiceProvider("$root/app/config/config.json", $configurationVars));
         
         // Load environment configuration
-        $env = $this['environment'] ?: 'prod';
         $this->register(new ConfigServiceProvider("$root/app/config/$env.json", $configurationVars));
         
         $this->register(new ServiceControllerServiceProvider());
@@ -126,9 +128,19 @@ class Application extends SilexApplication
             ),
         ]);
         
-        $this->register(new MonologServiceProvider(), array(
+        $this->register(new MonologServiceProvider(), [
             'monolog.logfile' => "$root/app/logs/tvguide.log",
-        ));
+        ]);
+        
+        $this->register(new SecurityServiceProvider(), [
+            'security.firewalls' => [
+                'contributor' => [
+                    'pattern' => new SecurityRequestMatcher(),
+                    'http' => true,
+                    'users' => $this['parameters']['users']
+                ],
+            ]
+        ]);
         
         $this->register(new AnnotationServiceProvider(), [
             "annot.cache" => new FilesystemCache($this['cache.directory'] . '/silex-annotation'),

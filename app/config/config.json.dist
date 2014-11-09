@@ -1,5 +1,4 @@
 {
-    "environment": "prod",
     "parameters": {
         "db": {
             "driver": "pdo_mysql",
@@ -11,6 +10,9 @@
         "images": {
             "baseUri": "%uri%/images",
             "directory": "%root%/web/images"
+        },
+        "users": {
+            "user": ["ROLE_CONTRIBUTOR", ""]
         }
     }
 }

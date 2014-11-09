@@ -24,7 +24,7 @@ class ProgramTest extends WebTestCase
     {
         $this->markTestSkipped('Try to avoid cache issues');
         
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
         
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
@@ -65,16 +65,25 @@ class ProgramTest extends WebTestCase
 
     public function testDeleteWrongProgram()
     {
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
 
         $wrongProgramId = 'fake-id';
         $client->request('DELETE', '/v1/programs/' . $wrongProgramId);
         $this->assertFalse($client->getResponse()->isOk());
     }
     
-    public function testCreateProgramWithImage()
+    public function testPostNeedCredentials()
     {
         $client = $this->createClient();
+        
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([]));
+        $response = $client->getResponse();
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+    
+    public function testCreateProgramWithImage()
+    {
+        $client = $this->createAuthenticatedClient();
         
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
@@ -98,7 +107,7 @@ class ProgramTest extends WebTestCase
     
     public function testCreateProgramInChannel()
     {
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
 
         // Create a program
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
@@ -120,7 +129,7 @@ class ProgramTest extends WebTestCase
 
     public function testCreateProgramInWrongChannel()
     {
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
 
         // Create a program
         $client->request('POST', '/v1/channels/fake-id/programs', [], [], ['content_type' => 'application/json'], json_encode([
@@ -137,7 +146,7 @@ class ProgramTest extends WebTestCase
     {
         $this->markTestSkipped('todo : handle errors in channelController.');
 
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
 
         // Fail to create wrong programs
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
@@ -159,7 +168,7 @@ class ProgramTest extends WebTestCase
     
     public function testCreateProgramWithCredits()
     {
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
             'start' => date('c', time() - 3600),
@@ -184,7 +193,7 @@ class ProgramTest extends WebTestCase
     
     public function testCreateProgramWithExistingActor()
     {
-        $client = $this->createClient();
+        $client = $this->createAuthenticatedClient();
         $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode([
             'title' => 'Test Program',
             'start' => date('c', time() - 3600),

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8d8f44fa98891597d1066a06bd35f1da",
+    "hash": "cc64136f7422985165233de391e5728d",
     "packages": [
         {
             "name": "ddesrosiers/silex-annotation-provider",
@@ -1465,17 +1465,17 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v2.3.21",
+            "version": "v2.5.6",
             "target-dir": "Symfony/Component/BrowserKit",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/BrowserKit.git",
-                "reference": "6a403eedacb56d32dc2cc657cfeac09d640ae6bc"
+                "reference": "0cb9e603b1850c9495bfb96b3c4caf7ea17700d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/6a403eedacb56d32dc2cc657cfeac09d640ae6bc",
-                "reference": "6a403eedacb56d32dc2cc657cfeac09d640ae6bc",
+                "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/0cb9e603b1850c9495bfb96b3c4caf7ea17700d4",
+                "reference": "0cb9e603b1850c9495bfb96b3c4caf7ea17700d4",
                 "shasum": ""
             },
             "require": {
@@ -1492,7 +1492,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1516,36 +1516,38 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-22 08:32:35"
+            "time": "2014-09-22 09:14:18"
         },
         {
             "name": "symfony/console",
-            "version": "v2.3.21",
+            "version": "v2.5.6",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "aa12ac573c583a74c2cb26ad9be478e119f04ad1"
+                "reference": "6f177fca24200a5b97aef5ce7a5c98124a0f0db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/aa12ac573c583a74c2cb26ad9be478e119f04ad1",
-                "reference": "aa12ac573c583a74c2cb26ad9be478e119f04ad1",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/6f177fca24200a5b97aef5ce7a5c98124a0f0db0",
+                "reference": "6f177fca24200a5b97aef5ce7a5c98124a0f0db0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
+                "psr/log": "~1.0",
                 "symfony/event-dispatcher": "~2.1"
             },
             "suggest": {
+                "psr/log": "For using the console logger",
                 "symfony/event-dispatcher": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1569,21 +1571,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-05 13:45:10"
+            "time": "2014-10-05 13:57:04"
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.21",
+            "version": "v2.5.6",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "d9943386b648d21746bed25cc24f61fab1387943"
+                "reference": "7cdf543a3f31935aae58de4e6e607d4bdeb3f5dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/d9943386b648d21746bed25cc24f61fab1387943",
-                "reference": "d9943386b648d21746bed25cc24f61fab1387943",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/7cdf543a3f31935aae58de4e6e607d4bdeb3f5dc",
+                "reference": "7cdf543a3f31935aae58de4e6e607d4bdeb3f5dc",
                 "shasum": ""
             },
             "require": {
@@ -1592,7 +1594,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1620,7 +1622,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-09 12:30:02"
+            "time": "2014-10-09 16:00:03"
         },
         {
             "name": "symfony/debug",
@@ -2071,6 +2073,80 @@
                 "uri",
                 "url"
             ],
+            "time": "2014-10-24 05:49:22"
+        },
+        {
+            "name": "symfony/security",
+            "version": "v2.5.6",
+            "target-dir": "Symfony/Component/Security",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Security.git",
+                "reference": "533f832af99e32dd74d7e3a7d6a3857c3d149614"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/533f832af99e32dd74d7e3a7d6a3857c3d149614",
+                "reference": "533f832af99e32dd74d7e3a7d6a3857c3d149614",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/event-dispatcher": "~2.1",
+                "symfony/http-foundation": "~2.1",
+                "symfony/http-kernel": "~2.4"
+            },
+            "replace": {
+                "symfony/security-acl": "self.version",
+                "symfony/security-core": "self.version",
+                "symfony/security-csrf": "self.version",
+                "symfony/security-http": "self.version"
+            },
+            "require-dev": {
+                "doctrine/common": "~2.2",
+                "doctrine/dbal": "~2.2",
+                "ircmaxell/password-compat": "1.0.*",
+                "psr/log": "~1.0",
+                "symfony/expression-language": "~2.4",
+                "symfony/routing": "~2.2",
+                "symfony/validator": "~2.2,<2.5.0"
+            },
+            "suggest": {
+                "doctrine/dbal": "For using the built-in ACL implementation",
+                "ircmaxell/password-compat": "For using the BCrypt password encoder in PHP <5.5",
+                "symfony/class-loader": "For using the ACL generateSql script",
+                "symfony/expression-language": "For using the expression voter",
+                "symfony/finder": "For using the ACL generateSql script",
+                "symfony/routing": "For using the HttpUtils class to create sub-requests, redirect the user, and match URLs",
+                "symfony/validator": "For using the user password constraint"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Security\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Security Component",
+            "homepage": "http://symfony.com",
             "time": "2014-10-24 05:49:22"
         }
     ],
