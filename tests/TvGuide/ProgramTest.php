@@ -219,4 +219,24 @@ class ProgramTest extends WebTestCase
         $this->assertNotEmpty($program['credits']['actors'][1]['description']);
         $this->assertNotContains('description', $program['credits']['actors'][2]);
     }
+    
+    public function testCreateDuplicateProgram()
+    {
+        $client = $this->createAuthenticatedClient();
+        $program = [
+            'title' => 'Test Program',
+            'start' => date('c', time() - 3600),
+            'stop' => date('c')
+        ];
+        
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode($program));
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOk());
+        
+        $client->request('POST', '/v1/channels/fr-ch1/programs', [], [], ['content_type' => 'application/json'], json_encode($program));
+        $response = json_decode($client->getResponse()->getContent(), true);
+        $this->assertEquals(409, $client->getResponse()->getStatusCode());
+        $this->assertEquals(409, $response['code']);
+        $this->assertEquals('PROGRAM_CONFLICT', $response['status']);
+    }
 }

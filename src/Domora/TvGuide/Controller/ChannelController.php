@@ -4,11 +4,13 @@ namespace Domora\TvGuide\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use DDesrosiers\SilexAnnotations\Annotations as Silex;
 
 use Domora\TvGuide\Data\Channel;
 use Domora\TvGuide\Data\Program;
 use Domora\TvGuide\Response\Success;
+use Domora\TvGuide\Response\Error;
 
 class ChannelController extends AbstractController
 {
@@ -88,9 +90,13 @@ class ChannelController extends AbstractController
             $program->importImageFromUrl($data['image']);
         }
         
-        $this->em->persist($program);
-        $this->em->flush();
-
+        try {
+            $this->em->persist($program);
+            $this->em->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw new Error(409, 'PROGRAM_CONFLICT');
+        }
+        
         return new Success(200, 'PROGRAM_CREATED', $program);
     }
 }
